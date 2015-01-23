@@ -1,0 +1,6 @@
+/node_modules/
+/bower_components/
+angular.xcodeproj
+npm-debug.log
+/scripts/bower/bower-*
+/tmp/
