@@ -1,9 +1,6 @@
-(function(angular) {
 'use strict';
+var TouchSurface = require('./lib/touch_surface');
 // TODO(productionize) use some module system
-// -- require('doodleTools')
-// -- require('doodleSurface')
-// -- require('TouchSurface')
 // -- require lib to deal with screen orientation standards
 // -- require lib to deal with fullscreen mode standards
 
@@ -16,7 +13,10 @@
  * @constructor
  * @ngInject
  */
-var DoodleAppPageCtrl = function($scope, $window, $document) {
+var DoodlePage = module.exports = function DoodlePage(
+    $scope,
+    $window,
+    $document) {
   /** @private {boolean} */
   this.fullScreenRequested_ = false;
 
@@ -27,17 +27,17 @@ var DoodleAppPageCtrl = function($scope, $window, $document) {
       this.handleSurfaceLoaded_.
           bind(this, $window, $document.eq(0)[0].documentElement));
 
-  DoodleAppPageCtrl.preventOrientationChange_($window.screen);
+  DoodlePage.preventOrientationChange_($window.screen);
 };
 
 
 /** @const {boolean} */
-DoodleAppPageCtrl.FULLSCREEN_MODE = false;
+DoodlePage.FULLSCREEN_MODE = false;
 
 
 /** @const {boolean} */
 // TODO Figure out why forcing a particular orientation is broken!!
-DoodleAppPageCtrl.FORCE_PORTRAIT_ORIENTATION = false;
+DoodlePage.FORCE_PORTRAIT_ORIENTATION = false;
 
 
 
@@ -48,8 +48,8 @@ DoodleAppPageCtrl.FORCE_PORTRAIT_ORIENTATION = false;
  *
  * @param {!Screen} scrn
  */
-DoodleAppPageCtrl.preventOrientationChange_ = function(scrn) {
-  var orientation = DoodleAppPageCtrl.FORCE_PORTRAIT_ORIENTATION ?
+DoodlePage.preventOrientationChange_ = function(scrn) {
+  var orientation = DoodlePage.FORCE_PORTRAIT_ORIENTATION ?
       'portrait-primary' :
       (scrn.lockOrientation ||
       scrn.mozLockOrientation ||
@@ -68,9 +68,9 @@ DoodleAppPageCtrl.preventOrientationChange_ = function(scrn) {
  * @param {!Element} docEl
  * @private
  */
-DoodleAppPageCtrl.prototype.handleSurfaceLoaded_ = function(win, docEl) {
+DoodlePage.prototype.handleSurfaceLoaded_ = function(win, docEl) {
   this.isLoading = false;
-  if (DoodleAppPageCtrl.FULLSCREEN_MODE) {
+  if (DoodlePage.FULLSCREEN_MODE) {
     var requestFullScreenApi = docEl.requestFullScreen ||
         docEl.webkitRequestFullScreen ||
         docEl.mozRequestFullScreen;
@@ -84,27 +84,3 @@ DoodleAppPageCtrl.prototype.handleSurfaceLoaded_ = function(win, docEl) {
     }.bind(this));
   }
 };
-
-
-/** @type {!angular.Module} Oliver Play App or "OPA" */
-var doodleApp = angular.
-    module('doodleApp', []).
-    constant('VERSION_SHORT_URL', 'goo.gl/loJaO5').  // Short URL to this app
-    controller(
-        'DoodleAppPageCtrl',
-        ['$scope', '$window', '$document', DoodleAppPageCtrl]).
-    directive(
-        doodleTools.directive.NAME,
-        [doodleTools.directive.builder]).
-    directive(
-        doodleSurface.directive.NAME,
-        ['$rootScope', doodleSurface.directive.builder]);
-
-
-Object.keys(doodleTools.directive.children).forEach(function(childKey) {
-  var childDefinition = doodleTools.directive.children[childKey];
-  doodleApp.directive(childDefinition.NAME, childDefinition.builder);
-});
-
-
-})(window.angular);

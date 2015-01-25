@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Canvas doodling JavaScript with an AngularJS directive for delivery",
   "main": "index.html",
-  "scripts": {
-    "test": "echo 'Error: no test specified' && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jzacsh/doodle"
@@ -15,5 +12,32 @@
   "bugs": {
     "url": "https://github.com/jzacsh/doodle/issues"
   },
-  "homepage": "https://github.com/jzacsh/doodle"
+  "homepage": "https://github.com/jzacsh/doodle",
+  "dependencies": {
+    "angular": "^1.3.10",
+    "browserify": "^8.1.1",
+    "browserify-shim": "^3.8.2",
+    "ncp": "^1.0.1"
+  },
+  "config": {
+    "temp": "tmp",
+    "source": "src"
+  },
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1",
+    "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
+    "browserify": "browserify $npm_package_config_source/doodle_app.js > $npm_package_config_temp/app.js",
+    "build": "npm run browserify && cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
+    "rebuild": "npm run clean && npm run build",
+    "serve": "cd $npm_package_config_temp && python -m SimpleHTTPServer 8000",
+    "reserve": "npm run rebuild && npm run serve"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "angular": "global:angular"
+  }
 }

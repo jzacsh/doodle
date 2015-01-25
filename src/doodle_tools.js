@@ -1,10 +1,11 @@
 'use strict';
+var TouchSurface = require('./lib/touch_surface')
 // TODO(productionize) use some module system
-// -- provide: 'doodleTools'
-// -- require('TouchSurface')
 // -- require lib to deal with Promise APIs used in the raw here (Ecma6)
 // -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
-var doodleTools = (function() {
+
+module.exports = (function() {
+
 
 var doodleTools = {directive: {}};
 
@@ -375,7 +376,7 @@ Controller.prototype.openDashboard = function() {
 
 /** Opens a filmstrip list showing an interactive history tree. */
 Controller.prototype.openHistoryPane = function() {
-  // DO NOT SUBMIT - this codepath is totally unthought out!
+  throw new Error('TODO implement! This codepath is not thought through..');
   this.updateToolboxMode_(Controller.ToolBox.HISTORY);
 };
 
@@ -410,9 +411,9 @@ Controller.prototype.isRedoDisabled = function() {
 };
 
 
-/** DO NOT SUBMIT - document me! */
+/** Saves current history to local app storage. */
 Controller.prototype.handleSave = function() {
-  throw new Error('implement me!');
+  throw new Error('implement localStorage/3rd-party API/etc. storage!');
 };
 
 
@@ -472,22 +473,22 @@ Controller.prototype.historyScaleFilter = function(pane, index) {
 
 
 /**
- * @param {DO NOT SUBMIT} pane
+ * @param {!ContextHistory.Update} pane
  * @return {!Object.<string, boolean>}
  */
 Controller.prototype.buildHistoryPaneStyles = function(pane) {
   var styles = {};
-  return styles;  // DO NOT SUBMIT
+  return styles;
 };
 
 
-/** @return {!Array.<DO NOT SUBMIT>} */
+/** @return {!Array.<!ContextHistory.Update>} */
 Controller.prototype.getHistoryPanes = function() {
   if (!this.isLoaded()) {
     return [];
   }
 
-  return this.getHistory().get
+  throw new Error('implement! return this.getHistory().someNewApi()');
 };
 
 

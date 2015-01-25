@@ -1,6 +1,4 @@
 'use strict';
-// TODO(productionize) use some module system
-// -- provide: ContextModification
 
 
 
@@ -18,7 +16,10 @@
  *     Descriptor if {@code type} is {@code METHOD}.
  * @constructor
  */
-var ContextModification = function(type, opt_property, opt_methodCall) {
+var ContextModification = module.exports = function ContextModification(
+    type,
+    opt_property,
+    opt_methodCall) {
   ContextModification.
       assertDescriptorsMatchType_.apply(null  /*this*/, arguments);
 

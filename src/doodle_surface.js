@@ -1,8 +1,7 @@
 'use strict';
-// TODO(productionize) use some module system
-// -- provide: 'doodleSurface'
-// -- require('TouchSurface')
-var doodleSurface = {directive: {}};
+var doodleSurface = module.exports = {directive: {}};
+
+var TouchSurface = require('./lib/touch_surface')
 
 
 /** @const {string} */

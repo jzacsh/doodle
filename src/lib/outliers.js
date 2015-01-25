@@ -1,6 +1,5 @@
 'use strict';
 // TODO(productionize) use some module system
-// -- provide: 'Outliers'
 // -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 
@@ -12,7 +11,7 @@
  * @param {!Array.<!Outliers.Value>} values
  * @constructor
  */
-var Outliers = function(values) {
+var Outliers = module.exports = function Outliers(values) {
   /** @private {!Array.<!Outliers.Value>} */
   this.data_ = values;
 

@@ -1,7 +1,7 @@
 'use strict';
+var ContextModification = require('./context_modification');
+
 // TODO(productionize) use some module system
-// -- provide: RenderUpdate
-// -- require('ContextModification')
 // -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 
@@ -19,7 +19,9 @@
  *     Defaults to building a new history of modifications.
  * @constructor
  */
-var RenderUpdate = function(timeStamp, opt_modifications) {
+var RenderUpdate = module.exports = function RenderUpdate(
+    timeStamp,
+    opt_modifications) {
   /** @type {number} */
   this.timeStamp = timeStamp;
 

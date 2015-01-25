@@ -1,8 +1,7 @@
 'use strict';
 // TODO(productionize) use some module system
-// -- provide: 'TouchSurface'
-// -- require('ContextHistory')
-// -- require('ContextTouch')
+var ContextHistory = require('./context_history');
+var ContextTouch = require('./context_touch');
 
 
 
@@ -16,7 +15,7 @@
  * @param {!TouchSurface.TouchChangedHandler} endHandler
  * @constructor
  */
-var TouchSurface = function(
+var TouchSurface = module.exports = function TouchSurface(
     $rootScope,
     $window,
     $document,

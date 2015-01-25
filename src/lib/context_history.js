@@ -1,10 +1,10 @@
 'use strict';
-// TODO(productionize) use some module system
-// -- provide: 'ContextHistory'
-// -- require('RenderUpdate')
-// -- require('Outliers')
-// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
+var RenderUpdate = require('./render_update');
+var Outliers = require('./outliers');
 
+
+// TODO(productionize) use some module system
+// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 // TODO: Figure out how to differntiate - and if it matters - between the
 // following subtly different timestamps to determine which chronology of
@@ -17,7 +17,7 @@
 
 
 /** @constructor */
-var ContextHistory = function() {
+var ContextHistory = module.exports = function ContextHistory() {
   /**
    * Chronologically stored RenderUpdate records for previous
    * {@link TouchRendition} occurences, sorted by {@link RenderUpdate#timeStamp}
