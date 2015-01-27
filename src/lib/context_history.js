@@ -23,7 +23,7 @@ var ContextHistory = module.exports = function ContextHistory() {
    * {@link TouchRendition} occurences, sorted by {@link RenderUpdate#timeStamp}
    * of respective original {@link TouchEvent} source.
    *
-   * @private {!Array.<!ContextHistory.Update>}
+   * @private {!ContextHistory.Timeline}
    */
    this.history_ = [];
 
@@ -32,8 +32,8 @@ var ContextHistory = module.exports = function ContextHistory() {
 
    /**
     * Existing alternative branches to the current timeline in
-    * {@link #history_}, keyed by the {@link RenderUpdate#timeStamp} of the last
-    * unchanged place in the timeline before a branch was created.
+    * {@link #history_}, keyed by the index of the point in a timeline for
+    * which they represent an alterntative.
     *
     * @private {!Object.<number, !Array.<!ContextHistory.Branch>}
     */
@@ -55,11 +55,15 @@ var ContextHistory = module.exports = function ContextHistory() {
 };
 
 
+/** @typdef {Array.<!ContextHistory.Update>} */
+ContextHistory.Timeline;
+
+
 /**
  * - history: the branched version of history
  * - branchedAt: timeStamp when the branch occurred.
  * 
- * @typedef {{branchedAt: number, history: !Array.<!ContextHistory.Update>}}
+ * @typedef {{branchedAt: number, history: !ContextHistory.Timeline}}
  */
 ContextHistory.Branch;
 
@@ -467,12 +471,11 @@ ContextHistory.prototype.maybeBranchForUpdatesAt_ = function(branchTimeStamp) {
     return;  // nothing to branch
   }
 
-  this.branches_[this.redoBranchIndex_] =
-      this.branches_[this.redoBranchIndex_] || [];
-  this.branches_[this.redoBranchIndex_].push({
+  var presentIndex = this.getPresentIndex();
+  this.branches_[presentIndex] = this.branches_[presentIndex] || [];
+  this.branches_[presentIndex].push({
     branchedAt: branchTimeStamp,
-    history: this.history_.
-        splice(this.redoBranchIndex_ + 1, this.history_.length)
+    history: this.history_.splice(presentIndex + 1, this.history_.length)
   });
   this.redoBranchIndex_ = null;
 };
@@ -480,7 +483,7 @@ ContextHistory.prototype.maybeBranchForUpdatesAt_ = function(branchTimeStamp) {
 
 /** @return {Array.<!ContextHistory.Branch>} for the current point in history */
 ContextHistory.prototype.getHistoricalBranches = function() {
-  return this.branches_[this.getTimeStamp()] || null;
+  return this.branches_[this.getPresentIndex()] || null;
 };
 
 
@@ -495,11 +498,7 @@ ContextHistory.prototype.hasHistoricalPauses = function() {
 
 /** @return {boolean} */
 ContextHistory.prototype.hasHistoricalBranches = function() {
-  var branchTimeStamps = Object.keys(this.branches_);
-  return Boolean(branchTimeStamps.length) &&
-      branchTimeStamps.some(function(branchStamp, branches) {
-        return Boolean(branches && branches.length);
-      }.bind(this));
+  return Boolean(Object.keys(this.branches_).length);
 };
 
 
