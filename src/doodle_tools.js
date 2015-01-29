@@ -422,13 +422,15 @@ Controller.prototype.handleDownload = function(event) {
   if (!this.hasDoodle()) {
     return;
   }
-  var canvas = this.surface_.getCanvas();
-
   // Temporarily set a white background
   this.surface_.clear(true  /*opt_offTheRecord*/);
-  this.surface_.getContext().fillStyle = this.settings_.backgroundColor;
-  this.surface_.getContext().fillRect(0, 0, canvas.width, canvas.height);
-  this.surface_.redraw(true  /** opt_retainCurrentSurface */);
+
+  var canvas = this.surface_.getCanvas();
+  var context = this.surface_.getContext();
+
+  context.fillStyle = this.surface_.getBackgroundColorSetting();
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  this.surface_.redraw(true  /*opt_retainCurrentSurface*/);
 
   var doodleStamp = this.surface_.contextHistory.getTimeStamp();
   var downloadAs = 'doodle_' + doodleStamp + '_saved:' +
