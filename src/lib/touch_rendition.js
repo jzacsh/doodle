@@ -1,7 +1,7 @@
 'use strict';
+var RenderUpdate = require('./render_update');
+
 // TODO(productionize) use some module system
-// -- provide: 'TouchRendition'
-// -- require('RenderUpdate')
 // -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 
@@ -14,7 +14,7 @@
  * @param {number} triggerTimestamp
  * @constructor
  */
-var TouchRendition = function(touch, frame, triggerTimestamp) {
+var TouchRendition = module.exports = function(touch, frame, triggerTimestamp) {
   /**
    * Purpose here is to enable generic features such as "undo" checkpoints or
    * even manipulation of visual 2D-"layers".
@@ -29,7 +29,6 @@ var TouchRendition = function(touch, frame, triggerTimestamp) {
   /** @type {!Touch} */
   this.touch = TouchRendition.copyTouch_(touch);
 };
-var TouchRendition = TouchRendition;
 
 
 /** @const {number} milliseconds */

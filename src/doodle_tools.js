@@ -568,7 +568,7 @@ doodleTools.directive.MARKUP =
 
     '</div>' +  // dashboard
 
-    '<div class="history" ' +
+/* TODO finish this
         angularCoreCamelToDash_(doodleTools.directive.children.history.NAME) +
     '     ng-show="' + ctrlAs_ + '.isHistoryPaneOpen()">' +
 
@@ -590,6 +590,7 @@ doodleTools.directive.MARKUP =
     '  </div>' +
 
     '</div>' +  // history
+*/
 
     '</div>';
 

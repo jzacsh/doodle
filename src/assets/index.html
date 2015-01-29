@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="doodleApp" ng-controller="DoodleAppPageCtrl as ctrl">
+<html lang="en" ng-app="doodleApp">
 <head>
   <title>Doodle goo.gl/loJaO5</title>
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="doodle_style.css" />
-  <script src="app.js"></script>
 </head>
-<body>
+<body ng-controller="DoodlePage as ctrl">
 
   <p ng-show="ctrl.isLoading">App Loading...</p>
 
@@ -18,5 +17,6 @@
           doodle-surface
           doodle-surface-varying-move-widths></canvas>
 
+  <script src="app.js"></script>
 </body>
 </html>

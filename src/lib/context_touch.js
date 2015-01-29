@@ -1,7 +1,7 @@
 'use strict';
+var TouchRendition = require('./touch_rendition');
+
 // TODO(productionize) use some module system
-// -- provide: 'ContextTouch'
-// -- require('TouchRendition')
 // -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 
@@ -13,7 +13,7 @@
  * @param {!CanvasRenderingContext2D} context
  * @constructor
  */
-var ContextTouch = function(context) {
+var ContextTouch = module.exports = function(context) {
   /** @private {!CanvasRenderingContext2D} */
   this.context_ = context;
 
@@ -28,7 +28,6 @@ var ContextTouch = function(context) {
    */
   this.ongoing_ = {};
 };
-var ContextTouch = ContextTouch;
 
 
 /**

@@ -1,5 +1,5 @@
 'use strict';
-var angular = require('angular');
+var angular = require('./lib/angular');
 var doodleTools = require('./doodle_tools');
 var doodleSurface = require('./doodle_surface');
 var DoodlePage = require('./doodle_page');

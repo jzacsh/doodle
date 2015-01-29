@@ -30,7 +30,7 @@
     "build": "npm run browserify && cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
     "rebuild": "npm run clean && npm run build",
     "serve": "cd $npm_package_config_temp && python -m SimpleHTTPServer 8000",
-    "reserve": "npm run rebuild && npm run serve"
+    "all": "npm run rebuild && npm run serve"
   },
   "browserify": {
     "transform": [
@@ -38,6 +38,6 @@
     ]
   },
   "browserify-shim": {
-    "angular": "global:angular"
+    "angular": "angular"
   }
 }
