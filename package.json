@@ -27,7 +27,7 @@
     "tagver": "TAG_VERSION",
     "tagbug": "TAG_FEEDBACK_URL",
     "devport": "8000",
-    "onwatch": "echo WATCH RESTARTING && npm run restart 2>/dev/null"
+    "onwatch": "echo WATCH RESTARTING && npm run restart"
   },
   "scripts": {
     "browserify": "browserify $npm_package_config_source/doodle_app.js > $npm_package_config_temp/app.js",

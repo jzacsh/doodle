@@ -1,9 +1,9 @@
 'use strict';
-var TouchSurface = require('./lib/touch_surface');
+var angular = require('../lib/angular');
+var TouchSurface = require('../lib/touch_surface');
 // TODO(productionize) use some module system
 // -- require lib to deal with screen orientation standards
 // -- require lib to deal with fullscreen mode standards
-
 
 
 /**
@@ -13,10 +13,7 @@ var TouchSurface = require('./lib/touch_surface');
  * @constructor
  * @ngInject
  */
-var DoodlePage = module.exports = function DoodlePage(
-    $scope,
-    $window,
-    $document) {
+var DoodlePage = function DoodlePage($scope, $window, $document) {
   /** @private {boolean} */
   this.fullScreenRequested_ = false;
 
@@ -29,6 +26,17 @@ var DoodlePage = module.exports = function DoodlePage(
 
   DoodlePage.preventOrientationChange_($window.screen);
 };
+
+
+/** @type {!angular.Module} */
+module.exports = angular.
+    module('DoodlePageModule', []).
+    controller('DoodlePage', [
+      '$scope',
+      '$window',
+      '$document',
+      DoodlePage
+    ]);
 
 
 /** @const {boolean} */
@@ -85,7 +93,7 @@ DoodlePage.prototype.handleSurfaceLoaded_ = function(win, docEl) {
       if (this.fullScreenRequested_) {
         return;  // only ask once
       }
-  
+
       this.fullScreenRequested_ = true;
       requestFullScreenApi.call(docEl);
     }.bind(this));
