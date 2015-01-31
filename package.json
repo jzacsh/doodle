@@ -27,10 +27,14 @@
     "test": "echo 'Error: no test specified' && exit 1",
     "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
     "browserify": "browserify $npm_package_config_source/doodle_app.js > $npm_package_config_temp/app.js",
-    "build": "npm run browserify && cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
+    "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
+    "version": "git show-ref --hash heads/master | tee | cut -c 1-10",
+    "tagbuild": "sed -i \"s|TAG_TEMPLATE|`npm run -s version`|\" $npm_package_config_temp/index.html",
+
+    "build": "npm run browserify && npm run mvassets && npm run tagbuild",
     "rebuild": "npm run clean && npm run build",
-    "serve": "cd $npm_package_config_temp && python -m SimpleHTTPServer 8000",
-    "all": "npm run rebuild && npm run serve"
+    "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer 8000",
+    "restart": "npm run rebuild && npm run start"
   },
   "browserify": {
     "transform": [
