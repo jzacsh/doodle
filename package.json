@@ -24,7 +24,7 @@
     "source": "src"
   },
   "scripts": {
-    "test": "echo 'Error: no test specified' && exit 1",
+    "test": "echo 'Error: no test specified' >&2 && exit 1",
     "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
     "browserify": "browserify $npm_package_config_source/doodle_app.js > $npm_package_config_temp/app.js",
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
