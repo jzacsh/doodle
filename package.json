@@ -40,13 +40,12 @@
     "tagbuild": "npm run tagversion && npm run tagbugurl",
 
     "test": "echo 'Error: no test specified' >&2 && exit 1",
+    "stop": "./bin/killonport $npm_package_config_devport",
     "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
     "build": "npm run browserify && npm run mvassets && npm run tagbuild",
-    "rebuild": "npm run clean && npm run build",
     "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer $npm_package_config_devport",
-    "stop": "./bin/killonport $npm_package_config_devport",
+    "restart": "npm run stop && npm run clean && npm run build && npm start",
 
-    "restart": "npm run stop && npm run rebuild && npm start",
     "watch": "./bin/watchforcoding.js \"$npm_package_config_onwatch\" --wait=.25 $PWD/$npm_package_config_source"
   },
   "browserify": {
