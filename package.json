@@ -21,7 +21,9 @@
   },
   "config": {
     "temp": "tmp",
-    "source": "src"
+    "source": "src",
+    "tagver": "TAG_VERSION",
+    "tagbug": "TAG_FEEDBACK_URL"
   },
   "scripts": {
     "test": "echo 'Error: no test specified' >&2 && exit 1",
@@ -29,8 +31,11 @@
     "browserify": "browserify $npm_package_config_source/doodle_app.js > $npm_package_config_temp/app.js",
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
     "version": "git show-ref --hash heads/master | tee | cut -c 1-10",
-    "bugurl": "echo \"$npm_package_homepage/issues/new?body=to+reproduce:&title=wrt+$(npm run -s version)\"",
-    "tagbuild": "sed -i \"s|TAG_TEMPLATE|`npm run -s version`|\" $npm_package_config_temp/index.html",
+    "bugurl": "echo \"$npm_package_homepage/issues/new?title=wrt+$(npm run -s version)\\&body=to+reproduce\"",
+    "tagtarget": "echo \"$npm_package_config_temp/index.html\"",
+    "tagversion": "sed -i \"s|$npm_package_config_tagver|`npm run -s version`|\" $(npm run -s tagtarget)",
+    "tagbugurl": "sed -i \"s|$npm_package_config_tagbug|`npm run -s bugurl`|\" $(npm run -s tagtarget)",
+    "tagbuild": "npm run tagversion && npm run tagbugurl",
 
     "build": "npm run browserify && npm run mvassets && npm run tagbuild",
     "rebuild": "npm run clean && npm run build",
