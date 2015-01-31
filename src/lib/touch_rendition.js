@@ -14,7 +14,10 @@ var RenderUpdate = require('./render_update');
  * @param {number} triggerTimestamp
  * @constructor
  */
-var TouchRendition = module.exports = function(touch, frame, triggerTimestamp) {
+var TouchRendition = module.exports = function TouchRendition(
+    touch,
+    frame,
+    triggerTimestamp) {
   /**
    * Purpose here is to enable generic features such as "undo" checkpoints or
    * even manipulation of visual 2D-"layers".

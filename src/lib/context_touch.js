@@ -13,7 +13,7 @@ var TouchRendition = require('./touch_rendition');
  * @param {!CanvasRenderingContext2D} context
  * @constructor
  */
-var ContextTouch = module.exports = function(context) {
+var ContextTouch = module.exports = function ContextTouch(context) {
   /** @private {!CanvasRenderingContext2D} */
   this.context_ = context;
 

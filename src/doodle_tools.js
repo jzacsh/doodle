@@ -115,7 +115,9 @@ doodleTools.directive.builder = function() {
  * @constructor
  * @ngInject
  */
-doodleTools.directive.Controller = function($scope, VERSION_SHORT_URL) {
+doodleTools.directive.Controller = function Controller(
+    $scope,
+    VERSION_SHORT_URL) {
   /** @private {!angular.Scope} */
   this.scope_ = $scope;
 
