@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+[[ -z $1 ]] && exit 1 # port is required arg
+
+process=$(fuser -n tcp "$1" 2>/dev/null)
+
+[[ -z "$process" ]] && {
+  printf '\tNo servers found\n'
+  exit
+}
+
+printf 'Found server(s) of :%s...\n' "$1"
+for pid in "$process"; do
+  printf '\t`kill`ing PID: %s...' $pid
+  kill $pid
+  pidexit=$?
+  if (( pidexit ));then
+    printf ' not killed! (`kill`: %s)\n' "$pidexit" >&2
+    exit 2
+  else
+    printf ' success\n' "$pidexit"
+  fi
+done
