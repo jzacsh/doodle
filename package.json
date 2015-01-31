@@ -29,6 +29,7 @@
     "browserify": "browserify $npm_package_config_source/doodle_app.js > $npm_package_config_temp/app.js",
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
     "version": "git show-ref --hash heads/master | tee | cut -c 1-10",
+    "bugurl": "echo \"$npm_package_homepage/issues/new?body=to+reproduce:&title=wrt+$(npm run -s version)\"",
     "tagbuild": "sed -i \"s|TAG_TEMPLATE|`npm run -s version`|\" $npm_package_config_temp/index.html",
 
     "build": "npm run browserify && npm run mvassets && npm run tagbuild",
