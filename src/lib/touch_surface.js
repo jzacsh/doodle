@@ -14,6 +14,7 @@ var ContextTouch = require('./context_touch');
  * @param {!TouchSurface.TouchChangedHandler} moveHandler
  * @param {!TouchSurface.TouchChangedHandler} endHandler
  * @constructor
+ * @ngInject
  */
 var TouchSurface = module.exports = function TouchSurface(
     $rootScope,
