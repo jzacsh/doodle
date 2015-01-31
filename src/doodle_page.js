@@ -59,7 +59,14 @@ DoodlePage.preventOrientationChange_ = function(scrn) {
       scrn.mozLockOrientation ||
       scrn.msLockOrientation ||
       (scrn.orientation && scrn.orientation.lock.bind(scrn.orientation));
-  lockApi(orientation);
+  lockApi(orientation).
+      catch(function(error){
+        if (error.name == 'NotSupportedError') {
+          return;  // was a best-effort, it's okay
+        }
+
+        throw new error;  // continue on up
+      });
 };
 
 
