@@ -39,9 +39,6 @@ var ContextHistory = module.exports = function ContextHistory() {
     */
    this.branches_ = {};
 
-   /** @private {?Outliers} */
-   this.outliers_ = null;
-
    /**
     * Stores map of {@link TimestampDiff}s describing {@link RenderUpdate}s -
     * keyed by the updates' respective {@code timeStamp}s - which occurred just
@@ -51,7 +48,7 @@ var ContextHistory = module.exports = function ContextHistory() {
     *
     * @private {!Object.<number, !Object.<number, !ContextHistory.TimstampDiff>>}
     */
-   this.prePauseUpdates_ = {};
+   this.cachedPrePauses_ = {};
 };
 
 
@@ -79,6 +76,16 @@ ContextHistory.Update;
 
 /** @typedef {{previous: number, next: number, delta: number}} */
 ContextHistory.TimestampDiff;
+
+
+/**
+ * Whether major chapters in history should be found using
+ * {@link Outliers#getMajorOutliers} as opposed to
+ * {@link Outliers#getMinorOutliers}.
+ *
+ * @const {boolean}
+ */
+ContextHistory.HISTORY_OUTLIERS_MAJOR = true;
 
 
 /**
@@ -140,24 +147,27 @@ ContextHistory.getDeltaFromDiff_ = function(diff) {
 
 
 /** @return {!Object.<number, !ContextHistory.TimstampDiff>} stored results */
-ContextHistory.prototype.getPrePauseUpdates_ = function() {
+ContextHistory.prototype.getCachedPrePauses_ = function() {
   if (this.history_.length < 10) {
     return {};  // skip processing without some real data
   }
 
-  var prePauseKeyStamps = Object.keys(this.prePauseUpdates_);
+  // Try to fetch results from cache
+  var prePauseKeyStamps = Object.keys(this.cachedPrePauses_);
   if (prePauseKeyStamps.length) {
     var lastTimeLengthKey = prePauseKeyStamps.map(parseInt).sort().pop();
     if (lastTimeLengthKey < this.history_.length * 2) {
-      return this.prePauseUpdates_[lastTimeLengthKey];  // use cache
+      return this.cachedPrePauses_[lastTimeLengthKey];  // use cache
     }
   }
 
-  return this.prePauseUpdates_[this.history_.length] = (function() {
+  // Populate and return from cache
+  return this.cachedPrePauses_[this.history_.length] = (function() {
     var map = {};
-    this.getSignificantDeltas_(true  /*forMajor*/).forEach(function(diff) {
-      map[diff.previous] = diff;
-    }.bind(this));
+    this.findSignificantDelats_(ContextHistory.HISTORY_OUTLIERS_MAJOR).
+        forEach(function(diff) {
+          map[diff.previous] = diff;
+        }.bind(this));
     return map;
   }.bind(this))();
 };
@@ -168,20 +178,9 @@ ContextHistory.prototype.getPrePauseUpdates_ = function() {
  * @return {!Array.<!ContextHistory.TimestampDiff>}
  * @private
  */
-ContextHistory.prototype.getSignificantDeltas_ = function(forMajor) {
-  if (!this.outliers_) {
-    this.buildOutliersFromHistory_();
-  }
-
-  return forMajor ?
-      this.outliers_.getMajorOutliers() : 
-      this.outliers_.getMinorOutliers();
-};
-
-
-/** @private */
-ContextHistory.prototype.buildOutliersFromHistory_ = function() {
-  this.outliers_ = new Outliers(this.buildTimestampOutlierDeltas_());
+ContextHistory.prototype.findSignificantDelats_ = function(forMajor) {
+  var outliers = new Outliers(this.buildTimestampOutlierDeltas_());
+  return forMajor ? outliers.getMajorOutliers() : outliers.getMinorOutliers();
 };
 
 
@@ -246,7 +245,7 @@ ContextHistory.prototype.isUpdatePrePause = function(update) {
  * @return {boolean}
  */
 ContextHistory.prototype.isUpdateStampPrePause = function(timeStamp) {
-  return Boolean(this.getPrePauseUpdates_()[timeStamp]);
+  return Boolean(this.getCachedPrePauses_()[timeStamp]);
 };
 
 
@@ -491,10 +490,10 @@ ContextHistory.prototype.getHistoricalBranches = function() {
 
 /** @return {boolean} */
 ContextHistory.prototype.hasHistoricalPauses = function() {
-  var latestPrePauseKey = Object.keys(this.prePauseUpdates_).pop();
+  var latestPrePauseKey = Object.keys(this.cachedPrePauses_).pop();
   return Boolean(
       latestPrePauseKey &&
-      Object.keys(this.prePauseUpdates_[latestPrePauseKey]).length);
+      Object.keys(this.cachedPrePauses_[latestPrePauseKey]).length);
 };
 
 
