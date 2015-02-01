@@ -1,10 +1,8 @@
 'use strict';
 var angular = require('../lib/angular');
+var underscore = require('underscore');
 var TouchSurface = require('../lib/touch_surface');
 var doodleVersion = require('./doodle_version');
-// TODO(productionize) use some module system
-// -- require lib to deal with Promise APIs used in the raw here (Ecma6)
-// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 
 
@@ -251,7 +249,7 @@ DoodleToolsCtrl.buildAnchorButtonMarkup_ = function(
  * @private
  */
 DoodleToolsCtrl.ifDefOr_ = function(input, alternative) {
-  return angular.isDefined(input) ? input : alternative;
+  return underscore.isUndefined(input) ? alternative : input;
 };
 
 
@@ -640,6 +638,6 @@ module.exports = angular.
 
 
 // HACK: define every child directive on the above exported module:
-angular.forEach(DoodleToolsCtrl.CHILDREN, function(childDirective) {
+underscore.forEach(DoodleToolsCtrl.CHILDREN, function(childDirective, name) {
   module.exports.directive(childDirective.NAME, childDirective.builder);
 });

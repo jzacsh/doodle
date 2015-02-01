@@ -1,5 +1,4 @@
 'use strict';
-// TODO(productionize) use some module system
 var ContextHistory = require('./context_history');
 var ContextTouch = require('./context_touch');
 

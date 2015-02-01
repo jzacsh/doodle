@@ -1,8 +1,6 @@
 'use strict';
 var TouchRendition = require('./touch_rendition');
-
-// TODO(productionize) use some module system
-// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
+var underscore = require('underscore');
 
 
 
@@ -77,7 +75,7 @@ ContextTouch.arrayEach_ = function(a, callback, from, to, opt_this) {
  * @private
  */
 ContextTouch.keyToId_ = function(changedTouchKey) {
-  return angular.isNumber(changedTouchKey) ?
+  return underscore.isNumber(changedTouchKey) ?
       changedTouchKey :
       changedTouchKey.identifier;
 };

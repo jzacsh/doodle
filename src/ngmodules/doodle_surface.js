@@ -1,5 +1,6 @@
 'use strict';
 var angular = require('../lib/angular')
+var underscore = require('underscore')
 var TouchSurface = require('../lib/touch_surface')
 
 
@@ -105,23 +106,10 @@ DoodleSurfaceCtrl.Options = {
 };
 
 
-/**
- * NOTE: COPY PASTED FROM http://stackoverflow.com/a/1527820
- *
- * @param {number} min
- * @param {number} max
- * @return {number}
- * @private
- */
-DoodleSurfaceCtrl.getRandomInRange_ = function(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-
 /** @return {!TouchSurface} */
- DoodleSurfaceCtrl.prototype.getSurface = function() {
-   return this.surface_;
- };
+DoodleSurfaceCtrl.prototype.getSurface = function() {
+  return this.surface_;
+};
 
 
 /**
@@ -158,7 +146,7 @@ DoodleSurfaceCtrl.prototype.getStartTouchColor_ = function() {
  */
 DoodleSurfaceCtrl.prototype.getStartTouchRadius_ = function() {
   return this.surface_.isEnabled(DoodleSurfaceCtrl.Options.PLAYTIME) ?
-         DoodleSurfaceCtrl.getRandomInRange_(
+         underscore.random(
              DoodleSurfaceCtrl.PlayMetric.START_RADIUS_MIN,
              DoodleSurfaceCtrl.PlayMetric.START_RADIUS_MAX) :
          (this.surface_.getLineWidthSetting() / 2);
@@ -343,13 +331,12 @@ DoodleSurfaceCtrl.prototype.encodeQuadtraticStyleTransition_ = function(
       previous.touch.pageX,
       previous.touch.pageY);
 
-  var controlXMultiplier = DoodleSurfaceCtrl.getRandomInRange_(0, 1) ? -2 : 2;
+  var controlXMultiplier = underscore.random(0, 1) ? -2 : 2;
   var controlY = incoming.touch.pageY;
-  var controlX = DoodleSurfaceCtrl.getRandomInRange_(
-      controlY, controlY * controlXMultiplier);
+  var controlX = underscore.random(controlY, controlY * controlXMultiplier);
 
   var pointX = incoming.touch.pageX;
-  var pointY = DoodleSurfaceCtrl.getRandomInRange_(
+  var pointY = underscore.random(
       incoming.touch.pageY, incoming.touch.pageY * -0.2);
 
   incoming.renderUpdate.recordMethod('quadraticCurveTo',
@@ -377,7 +364,7 @@ DoodleSurfaceCtrl.prototype.encodeQuadtraticStyleTransition_ = function(
 DoodleSurfaceCtrl.prototype.getMoveWidth_ = function() {
   return this.surface_.isEnabled(DoodleSurfaceCtrl.Options.PLAYTIME) &&
          this.surface_.isEnabled(DoodleSurfaceCtrl.Options.VARYING_MOVE_WIDTHS) ?
-      DoodleSurfaceCtrl.getRandomInRange_(
+      underscore.random(
           DoodleSurfaceCtrl.PlayMetric.MOVE_WIDTH_MIN,
           DoodleSurfaceCtrl.PlayMetric.MOVE_WIDTH_MAX) :
       this.surface_.getLineWidthSetting();
@@ -391,9 +378,7 @@ DoodleSurfaceCtrl.prototype.getMoveWidth_ = function() {
 DoodleSurfaceCtrl.prototype.getConnectionStyle_ = function() {
   if(this.surface_.isEnabled(DoodleSurfaceCtrl.Options.PLAYTIME) &&
      this.surface_.isEnabled(DoodleSurfaceCtrl.Options.WILD_CONNECTIONS)) {
-    var keys = Object.keys(DoodleSurfaceCtrl.ConnectionStyle);
-    var styleKey = keys[DoodleSurfaceCtrl.getRandomInRange_(0, keys.length - 1)];
-    return DoodleSurfaceCtrl.ConnectionStyle[styleKey];
+    return underscore.sample(DoodleSurfaceCtrl.ConnectionStyle, 1);
   } else {
     return DoodleSurfaceCtrl.ConnectionStyle.STRAIGHT;
   }

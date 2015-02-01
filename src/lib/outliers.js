@@ -1,6 +1,4 @@
 'use strict';
-// TODO(productionize) use some module system
-// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 
 /**

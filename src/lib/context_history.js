@@ -1,10 +1,8 @@
 'use strict';
+var underscore = require('underscore');
 var RenderUpdate = require('./render_update');
 var Outliers = require('./outliers');
 
-
-// TODO(productionize) use some module system
-// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
 
 // TODO: Figure out how to differntiate - and if it matters - between the
 // following subtly different timestamps to determine which chronology of
@@ -153,11 +151,17 @@ ContextHistory.prototype.getCachedPrePauses_ = function() {
   }
 
   // Try to fetch results from cache
-  var prePauseKeyStamps = Object.keys(this.cachedPrePauses_);
-  if (prePauseKeyStamps.length) {
-    var lastTimeLengthKey = prePauseKeyStamps.map(parseInt).sort().pop();
-    if (lastTimeLengthKey < this.history_.length * 2) {
-      return this.cachedPrePauses_[lastTimeLengthKey];  // use cache
+  if (!underscore.isEmpty(this.cachedPrePauses_)) {
+    var largestHistorySize = Object.
+        keys(this.cachedPrePauses_).
+        map(function(historySize, idx) {
+          return parseInt(historySize, 10  /*radix*/);
+        }).
+        sort().
+        pop();
+
+    if (largestHistorySize < this.history_.length * 2) {
+      return this.cachedPrePauses_[largestHistorySize];  // use cache
     }
   }
 
@@ -281,7 +285,7 @@ ContextHistory.erase = function(context) {
  * @param {number=} opt_endIndex
  */
 ContextHistory.prototype.playBack = function(context, opt_endIndex) {
-  var isPartialPlayback = angular.
+  var isPartialPlayback = underscore.
       isNumber(opt_endIndex) && opt_endIndex !== this.getEndingIndex_();
 
   var isRewind = isPartialPlayback && opt_endIndex < this.getPresentIndex();
@@ -334,7 +338,7 @@ ContextHistory.playBackUpdate_ = function(context, update) {
  *     potentially playback.
  */
 ContextHistory.prototype.isRedoPossible = function() {
-  return angular.isNumber(this.redoBranchIndex_);
+  return underscore.isNumber(this.redoBranchIndex_);
 };
 
 
@@ -359,9 +363,9 @@ ContextHistory.prototype.isUndoPossible = function() {
  * @return {number} timeStamp
  */
 ContextHistory.prototype.getTimeStamp = function(opt_historyIndex) {
-  var historyIndex = angular.isDefined(opt_historyIndex) ?
-                     opt_historyIndex :
-                     this.getPresentIndex();
+  var historyIndex = underscore.isUndefined(opt_historyIndex) ?
+                     this.getPresentIndex() :
+                     opt_historyIndex;
   return ContextHistory.getSingleRender_(this.history_[historyIndex]).timeStamp;
 };
 
@@ -490,16 +494,15 @@ ContextHistory.prototype.getHistoricalBranches = function() {
 
 /** @return {boolean} */
 ContextHistory.prototype.hasHistoricalPauses = function() {
-  var latestPrePauseKey = Object.keys(this.cachedPrePauses_).pop();
-  return Boolean(
-      latestPrePauseKey &&
-      Object.keys(this.cachedPrePauses_[latestPrePauseKey]).length);
+  return underscore.some(this.cachedPrePauses_, function(update) {
+    return Boolean(update && update.length);
+  });
 };
 
 
 /** @return {boolean} */
 ContextHistory.prototype.hasHistoricalBranches = function() {
-  return Boolean(Object.keys(this.branches_).length);
+  return !underscore.isEmpty(this.branches_);
 };
 
 

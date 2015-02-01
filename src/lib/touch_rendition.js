@@ -1,9 +1,6 @@
 'use strict';
 var RenderUpdate = require('./render_update');
 
-// TODO(productionize) use some module system
-// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
-
 
 
 /**

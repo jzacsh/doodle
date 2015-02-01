@@ -19,6 +19,7 @@
     "browserify-shim": "^3.8.2",
     "minimist": "^1.1.0",
     "ncp": "^1.0.1",
+    "underscore": "^1.7.0",
     "watch": "^0.13.0"
   },
   "config": {
@@ -36,20 +37,17 @@
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
     "version": "git show-ref --hash heads/master | tee | cut -c 1-10",
     "bugurl": "echo \"$npm_package_homepage/issues/new?title=wrt+$(npm run -s version)\\&body=to+reproduce\"",
-
     "tagtarget": "echo \"$npm_package_config_temp/index.html\"",
     "tagversion": "sed -i \"s|$npm_package_config_tagver|`npm run -s version`|\" $(npm run -s tagtarget)",
     "tagbugurl": "sed -i \"s|$npm_package_config_tagbug|`npm run -s bugurl`|\" $(npm run -s tagtarget)",
     "tagapp": "sed -i \"s|$npm_package_config_tagapp|$npm_package_config_appurl|\" $(npm run -s tagtarget)",
     "tagbuild": "npm run tagversion && npm run tagbugurl && npm run tagapp",
-
     "test": "echo 'Error: no test specified' >&2 && exit 1",
     "stop": "./bin/killonport $npm_package_config_devport",
     "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
     "build": "npm run browserify && npm run mvassets && npm run tagbuild",
     "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer $npm_package_config_devport",
     "restart": "npm run stop && npm run clean && npm run build && npm start",
-
     "watch": "./bin/watchforcoding.js \"$npm_package_config_onwatch\" --wait=.25 $PWD/$npm_package_config_source"
   },
   "browserify": {

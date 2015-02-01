@@ -2,9 +2,10 @@
 var angular = require('../lib/angular');
 var TouchSurface = require('../lib/touch_surface');
 var doodleVersion = require('./doodle_version');
-// TODO(productionize) use some module system
+// TODO(productionize):
 // -- require lib to deal with screen orientation standards
 // -- require lib to deal with fullscreen mode standards
+// -- consider necessity of lib to deal w/Promise APIs here (too experimental?)
 
 
 /**

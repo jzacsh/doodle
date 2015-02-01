@@ -1,9 +1,6 @@
 'use strict';
 var ContextModification = require('./context_modification');
 
-// TODO(productionize) use some module system
-// -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
-
 
 
 /**
