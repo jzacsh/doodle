@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="doodleApp">
+<html lang="en" ng-app="doodleApp" ng-controller="DoodlePage as ctrl">
 <head>
-  <title>Doodle goo.gl/loJaO5</title>
+  <title doodle-version-title></title>
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="doodle-tag-version" content="TAG_VERSION">
   <meta name="doodle-tag-feedback" content="TAG_FEEDBACK_URL">
+  <meta name="doodle-tag-appurl" content="TAG_APP_URL">
   <link rel="stylesheet" href="doodle_style.css" />
 </head>
-<body ng-controller="DoodlePage as ctrl">
+<body>
 
   <p ng-show="ctrl.isLoading">App Loading...</p>
 

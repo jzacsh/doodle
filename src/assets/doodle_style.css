@@ -29,14 +29,19 @@ canvas[doodle-surface] {
   padding: 0 0 .75ex .5ex;
 }
 
-.doodle-tools .dashboard .version-url {
+.doodle-tools .dashboard .help-info {
   font-family: monospace;
   font-size: 1.7ex;
   padding-left: 1em;
+  margin-top: 1em;
 }
 
-.doodle-tools .dashboard .version-url:after {
+.doodle-tools .dashboard .help-info:after {
   display: block;
   content: ' ';
   margin-bottom: .75ex;
+}
+
+.doodle-tools .dashboard .help-info .version-tag {
+  font-family: monospace;
 }

@@ -1,6 +1,7 @@
 'use strict';
 var angular = require('../lib/angular');
 var TouchSurface = require('../lib/touch_surface');
+var doodleVersion = require('./doodle_version');
 // TODO(productionize) use some module system
 // -- require lib to deal with screen orientation standards
 // -- require lib to deal with fullscreen mode standards
@@ -30,7 +31,9 @@ var DoodlePage = function DoodlePage($scope, $window, $document) {
 
 /** @type {!angular.Module} */
 module.exports = angular.
-    module('DoodlePageModule', []).
+    module('DoodlePageModule', [
+      doodleVersion.name
+    ]).
     controller('DoodlePage', [
       '$scope',
       '$window',
@@ -48,13 +51,13 @@ DoodlePage.FULLSCREEN_MODE = false;
 DoodlePage.FORCE_PORTRAIT_ORIENTATION = false;
 
 
-
 /**
  * Prevent orientation rotations, as this is a fullscreen canvas application, no
  * need to consider orientations at all (aside from how they distractingly can
  * crop our canvas contents).
  *
  * @param {!Screen} scrn
+ * @private
  */
 DoodlePage.preventOrientationChange_ = function(scrn) {
   var orientation = DoodlePage.FORCE_PORTRAIT_ORIENTATION ?

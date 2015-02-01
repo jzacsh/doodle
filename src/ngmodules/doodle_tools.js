@@ -1,6 +1,7 @@
 'use strict';
 var angular = require('../lib/angular');
-var TouchSurface = require('../lib/touch_surface')
+var TouchSurface = require('../lib/touch_surface');
+var doodleVersion = require('./doodle_version');
 // TODO(productionize) use some module system
 // -- require lib to deal with Promise APIs used in the raw here (Ecma6)
 // -- require('...some lib...') for `angular.*` utils, and delete `angular` refs
@@ -9,13 +10,10 @@ var TouchSurface = require('../lib/touch_surface')
 
 /**
  * @param {!angular.Scope} $scope
- * @param {string} VERSION_SHORT_URL
  * @constructor
  * @ngInject
  */
-var DoodleToolsCtrl = function DoodleToolsCtrl(
-    $scope,
-    VERSION_SHORT_URL) {
+var DoodleToolsCtrl = function DoodleToolsCtrl($scope) {
   /** @private {!angular.Scope} */
   this.scope_ = $scope;
 
@@ -39,9 +37,6 @@ var DoodleToolsCtrl = function DoodleToolsCtrl(
 
   /** @private {DoodleToolsCtrl.ToolBox} */
   this.toolBoxMode_ = DoodleToolsCtrl.ToolBox.ANCHORED;
-
-  /** @private {string} */
-  this.versionUrl_ = VERSION_SHORT_URL;
 
   /** @type {!Object.<string, function>} pre-bound functions on scope */
   this.scope_.filters = {
@@ -104,11 +99,7 @@ DoodleToolsCtrl.directiveBuilder = function() {
   return {
     replace: true,
     restrict: 'E',
-    controller: [
-      '$scope',
-      'VERSION_SHORT_URL',
-      DoodleToolsCtrl
-    ],
+    controller: ['$scope', DoodleToolsCtrl],
     controllerAs: DoodleToolsCtrl.CTRL_AS,
     template: DoodleToolsCtrl.DIRECTIVE_MARKUP,
     link: function postLink(scope, elem, attr, ctrl) {
@@ -224,12 +215,6 @@ DoodleToolsCtrl.buildAnchorButtonMarkup_ = function(
  */
 DoodleToolsCtrl.ifDefOr_ = function(input, alternative) {
   return angular.isDefined(input) ? input : alternative;
-};
-
-
-/** @return {string} */
-DoodleToolsCtrl.prototype.getVersionUrl = function() {
-  return this.versionUrl_;
 };
 
 
@@ -536,10 +521,6 @@ DoodleToolsCtrl.DIRECTIVE_MARKUP =
         DoodleToolsCtrl.ngCamToDash_(DoodleToolsCtrl.CHILDREN.dashboard.NAME) +
     '     ng-show="' + DoodleToolsCtrl.CTRL_AS + '.isDashboardOpen()">' +
 
-    '  <a class="version-url" ' +
-    '     ng-href="//{{' + DoodleToolsCtrl.CTRL_AS + '.getVersionUrl()}}">' +
-    '    {{' + DoodleToolsCtrl.CTRL_AS + '.getVersionUrl()}}</a>' +
-
     '  <button class="save"' +
     '          ng-disabled="!' + DoodleToolsCtrl.CTRL_AS + '.hasDoodle()"' +
     '          ng-click="' + DoodleToolsCtrl.CTRL_AS + '.handleSave()">' +
@@ -574,7 +555,13 @@ DoodleToolsCtrl.DIRECTIVE_MARKUP =
           DoodleToolsCtrl.CTRL_AS + '.isDashboardOpen()',
           DoodleToolsCtrl.CTRL_AS + '.anchorToolbox()') +
 
+    '  <div class="help-info">' +
+    '    <doodle-version-tag></doodle-version-tag>' +
+    '    <doodle-version-feedback></doodle-version-feedback>' +
+    '  </div>' +
+
     '</div>' +  // dashboard
+
 
 /* TODO finish this
         DoodleToolsCtrl.ngCamToDash_(DoodleToolsCtrl.CHILDREN.history.NAME) +
@@ -605,7 +592,9 @@ DoodleToolsCtrl.DIRECTIVE_MARKUP =
 
 /** @type {!angular.Module} */
 module.exports = angular.
-    module('doodleToolsModule', []).
+    module('doodleToolsModule', [
+      doodleVersion.name
+    ]).
     directive(
         DoodleToolsCtrl.DIRECTIVE_NAME,
         [DoodleToolsCtrl.directiveBuilder]);

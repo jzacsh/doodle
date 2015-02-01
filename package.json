@@ -26,6 +26,8 @@
     "source": "src",
     "tagver": "TAG_VERSION",
     "tagbug": "TAG_FEEDBACK_URL",
+    "tagapp": "TAG_APP_URL",
+    "appurl": "goo.gl/loJaO5",
     "devport": "8000",
     "onwatch": "echo WATCH RESTARTING && npm run restart"
   },
@@ -34,10 +36,12 @@
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
     "version": "git show-ref --hash heads/master | tee | cut -c 1-10",
     "bugurl": "echo \"$npm_package_homepage/issues/new?title=wrt+$(npm run -s version)\\&body=to+reproduce\"",
+
     "tagtarget": "echo \"$npm_package_config_temp/index.html\"",
     "tagversion": "sed -i \"s|$npm_package_config_tagver|`npm run -s version`|\" $(npm run -s tagtarget)",
     "tagbugurl": "sed -i \"s|$npm_package_config_tagbug|`npm run -s bugurl`|\" $(npm run -s tagtarget)",
-    "tagbuild": "npm run tagversion && npm run tagbugurl",
+    "tagapp": "sed -i \"s|$npm_package_config_tagapp|$npm_package_config_appurl|\" $(npm run -s tagtarget)",
+    "tagbuild": "npm run tagversion && npm run tagbugurl && npm run tagapp",
 
     "test": "echo 'Error: no test specified' >&2 && exit 1",
     "stop": "./bin/killonport $npm_package_config_devport",
