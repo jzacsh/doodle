@@ -53,7 +53,7 @@ canvas[doodle-surface] {
 }
 
 .doodle-tools .dashboard .help-info {
-  font-family: monospace;
+  font-family: sans-serif;
   font-size: 1.7ex;
   padding-left: 1em;
   margin-top: 1em;
@@ -67,4 +67,14 @@ canvas[doodle-surface] {
 
 .doodle-tools .dashboard .help-info .version-tag {
   font-family: monospace;
+  text-transform: uppercase;
+}
+
+.doodle-tools .dashboard .help-info abbr {
+  text-transform: none;
+  font-variant: small-caps;
+}
+
+.doodle-tools .dashboard .help-info doodle-version-feedback {
+  padding-left: 1ex;
 }

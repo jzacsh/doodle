@@ -50,7 +50,7 @@ DoodleVersionCtrl.CTRL_NG_INJECT = [
 /** @const {string} */
 DoodleVersionCtrl.FEEDBACK_FORM_MARKUP =
     '<span class="feedback">' +
-    '  feedback: ' +
+    '  Feedback: ' +
 
     '  <a class="github-feedback"' +
     '     target="_blank"' +
