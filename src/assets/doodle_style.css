@@ -25,6 +25,15 @@ canvas[doodle-surface] {
   text-shadow: 1px 1px 2px rgb(179, 179, 179);
 }
 
+
+.doodle-tools .dashboard a.btn {
+  display: inline-block; /* anchors act funny */
+}
+
+.doodle-tools .dashboard .btn[disabled] svg {
+  opacity: 0.5;
+}
+
 .doodle-tools .dashboard {
   padding: 0 0 .75ex .5ex;
 }

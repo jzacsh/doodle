@@ -65,14 +65,32 @@ DoodleToolsCtrl.DEFAULT_HISTORY_MACRO_SCALE = true;
 DoodleToolsCtrl.BOTTOM_SCREEN_TOP_PERCENTAGE = '84%';
 
 
-/** @enum {string} */
-DoodleToolsCtrl.HtmlEntity = {
-  ANCHOR_GEAR_KOG: '&#9881;',
-  UNDO_ARROW: '&#8630;',
-  REDO_ARROW: '&#8631;',
-  HISTORY_CLOCK: '&#128336;',
-  DOWNLOAD_TO_DISK: '&#8595;',
-  DOWNLOAD: '&#128190;'
+/**
+ * Material Design Google Icons, open sourced, and copied from repo at:
+ *     http://github.com/google/material-design-icons/tree/523913de6eb7584d
+ *
+ * See: google.github.io/material-design-icons/
+ * @enum {string}
+ */
+DoodleToolsCtrl.SvgIconPath = {
+  ANCHOR_GEAR_KOG:
+      '<path d="M0 0h24v24h-24z" fill="none"/>' +
+      '<path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65c-.03-.24-.24-.42-.49-.42h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-7.43 2.52c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>',
+  UNDO_ARROW:
+      '<path d="M0 0h24v24h-24z" fill="none"/>' +
+      '<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6l-3.6-3.6v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78c-1.39-4.19-5.32-7.22-9.97-7.22z"/>',
+  REDO_ARROW:
+      '<path d="M0 0h24v24h-24z" fill="none"/>' +
+      '<path d="M18.4 10.6c-1.85-1.61-4.25-2.6-6.9-2.6-4.65 0-8.58 3.03-9.96 7.22l2.36.78c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88l-3.62 3.62h9v-9l-3.6 3.6z"/>',
+  HISTORY_CLOCK:
+      '<path d="M0 0h24v24h-24z" fill="none"/>' +
+      '<path opacity=".9" d="M13 3c-4.97 0-9 4.03-9 9h-3l3.89 3.89.07.14 4.04-4.03h-3c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42c1.63 1.63 3.87 2.64 6.36 2.64 4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08v-4.25h-1.5z"/>',
+  DOWNLOAD_TO_DISK:
+      '<path d="M19 9h-4v-6h-6v6h-4l7 7 7-7zm-14 9v2h14v-2h-14z"/>' +
+      '<path d="M0 0h24v24h-24z" fill="none"/>',
+  DOWNLOAD:
+      '<path d="M0 0h24v24h-24z" fill="none"/>' +
+      '<path d="M17 3h-12c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-12l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10h-10v-4h10v4z"/>'
 };
 
 
@@ -187,6 +205,23 @@ DoodleToolsCtrl.ngCamToDash_ = function(name, opt_separator) {
 
 
 /**
+ * @param {DoodleToolsCtrl.SvgIconPath} iconPaths
+ * @return {string}
+ * @private
+ */
+DoodleToolsCtrl.buildSvg_ = function(iconPaths) {
+  var squareDim = 20;
+  var viewBoxDim = 22;
+  return '<svg xmlns="http://www.w3.org/2000/svg" ' +
+      '        width="' + squareDim + '" ' +
+      '        height="' + squareDim + '" ' +
+      '        viewBox="0 0 ' + viewBoxDim + ' ' + viewBoxDim + '">' +
+         iconPaths +
+      '</svg>';
+};
+
+
+/**
  * @param {string} title
  * @param {string} ngShowExpression
  * @param {string} ngClickExpression
@@ -203,7 +238,9 @@ DoodleToolsCtrl.buildAnchorButtonMarkup_ = function(
          '        ng-click="' + ngClickExpression + '"' +
          '        title="' + title + '"' +
          '        ng-show="' + ngShowExpression+ '"' +
-         '>' + DoodleToolsCtrl.HtmlEntity.ANCHOR_GEAR_KOG + '</button>';
+         '>' +
+         DoodleToolsCtrl.buildSvg_(DoodleToolsCtrl.SvgIconPath.ANCHOR_GEAR_KOG) +
+         '</button>';
 };
 
 
@@ -521,34 +558,34 @@ DoodleToolsCtrl.DIRECTIVE_MARKUP =
         DoodleToolsCtrl.ngCamToDash_(DoodleToolsCtrl.CHILDREN.dashboard.NAME) +
     '     ng-show="' + DoodleToolsCtrl.CTRL_AS + '.isDashboardOpen()">' +
 
-    '  <button class="save"' +
+    '  <button class="save btn"' +
     '          ng-disabled="!' + DoodleToolsCtrl.CTRL_AS + '.hasDoodle()"' +
     '          ng-click="' + DoodleToolsCtrl.CTRL_AS + '.handleSave()">' +
-         DoodleToolsCtrl.HtmlEntity.DOWNLOAD + '</button>' +
+         DoodleToolsCtrl.buildSvg_(DoodleToolsCtrl.SvgIconPath.DOWNLOAD) + '</button>' +
 
-    '  <a class="download"' +
+    '  <a class="download btn"' +
     '     ng-disabled="!' + DoodleToolsCtrl.CTRL_AS + '.hasDoodle()"' +
     '     ng-click="' + DoodleToolsCtrl.CTRL_AS + '.handleDownload($event)">' +
-          DoodleToolsCtrl.HtmlEntity.DOWNLOAD_TO_DISK + '</a>' +
+          DoodleToolsCtrl.buildSvg_(DoodleToolsCtrl.SvgIconPath.DOWNLOAD_TO_DISK) + '</a>' +
 
-    '  <button class="history"' +
+    '  <button class="history btn"' +
     '          ng-disabled="!' + DoodleToolsCtrl.CTRL_AS + '.hasComplexHistory()"' +
     '          ng-click="' + DoodleToolsCtrl.CTRL_AS + '.openHistoryPane()">' +
-         DoodleToolsCtrl.HtmlEntity.HISTORY_CLOCK + '</button>' +
+         DoodleToolsCtrl.buildSvg_(DoodleToolsCtrl.SvgIconPath.HISTORY_CLOCK) + '</button>' +
 
-    '  <button class="clear"' +
+    '  <button class="clear btn"' +
     '          ng-disabled="!' + DoodleToolsCtrl.CTRL_AS + '.hasDoodle()"' +
     '          ng-click="' + DoodleToolsCtrl.CTRL_AS + '.handleClear()">clear</button>' +
 
-    '  <button class="undo"' +
+    '  <button class="undo btn"' +
     '          ng-disabled="' + DoodleToolsCtrl.CTRL_AS + '.isUndoDisabled()"' +
     '          ng-click="' + DoodleToolsCtrl.CTRL_AS + '.handleUndo()">' +
-         DoodleToolsCtrl.HtmlEntity.UNDO_ARROW + '</button>' +
+         DoodleToolsCtrl.buildSvg_(DoodleToolsCtrl.SvgIconPath.UNDO_ARROW) + '</button>' +
 
-    '  <button class="redo"' +
+    '  <button class="redo btn"' +
     '          ng-disabled="' + DoodleToolsCtrl.CTRL_AS + '.isRedoDisabled()"' +
     '          ng-click="' + DoodleToolsCtrl.CTRL_AS + '.handleRedo()">' +
-         DoodleToolsCtrl.HtmlEntity.REDO_ARROW + '</button>' +
+         DoodleToolsCtrl.buildSvg_(DoodleToolsCtrl.SvgIconPath.REDO_ARROW) + '</button>' +
 
       DoodleToolsCtrl.buildAnchorButtonMarkup_(
           'Close Toolbar',
