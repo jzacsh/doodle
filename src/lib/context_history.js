@@ -452,12 +452,14 @@ ContextHistory.prototype.setRedoBranch_ = function(historyIndex) {
 ContextHistory.prototype.recordRelatedUpdates = function(
     recordingTimeStamp, relatedUpdates) {
   this.maybeBranchForUpdatesAt_(recordingTimeStamp);
-  if (relatedUpdates.length === 1) {
-    this.history_ = this.history_.
-        concat(relatedUpdates).
-        sort(ContextHistory.compareRenderUpdates_);
-  } else {
-    this.history_.push(relatedUpdates);
+
+  var isStrokedRender = relatedUpdates.length > 1;
+  var updates = isStrokedRender ? relatedUpdates : relatedUpdates[0];
+
+  this.history_.push(updates);
+
+  if (!isStrokedRender) {
+    this.history_ = this.history_.sort(ContextHistory.compareRenderUpdates_);
   }
 };
 
