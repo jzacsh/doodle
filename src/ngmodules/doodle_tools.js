@@ -486,8 +486,9 @@ DoodleToolsCtrl.prototype.handleDownload = function(event) {
       (Date.now() - doodleStamp) + 'ms.png';
 
   // Trigger download, given whitebackground
-  event.target.setAttribute('download', downloadAs);
-  event.target.setAttribute('href', canvas.toDataURL());
+  var anchor = event.target.parentElement;
+  anchor.setAttribute('download', downloadAs);
+  anchor.setAttribute('href', canvas.toDataURL());
 
   // redraw surface as we found it
   this.surface_.redraw();
@@ -566,6 +567,7 @@ DoodleToolsCtrl.DIRECTIVE_MARKUP =
     '  <a class="download btn"' +
     '     ng-disabled="!' + DoodleToolsCtrl.CTRL_AS + '.hasDoodle()"' +
     '     ng-click="' + DoodleToolsCtrl.CTRL_AS + '.handleDownload($event)">' +
+    '     <span class="clickability-hack">&nbsp;</span>' +
           DoodleToolsCtrl.buildSvg_(DoodleToolsCtrl.SvgIconPath.DOWNLOAD_TO_DISK) + '</a>' +
 
     '  <button class="history btn"' +

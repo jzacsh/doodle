@@ -30,6 +30,20 @@ canvas[doodle-surface] {
   display: inline-block; /* anchors act funny */
 }
 
+/** Clickability hack: SVG not a TextNode, I'm guessing? */
+.doodle-tools .dashboard > a.btn{ position: relative; }
+.doodle-tools .dashboard > a.btn .clickability-hack {
+  opacity: 0;
+  display: inline;
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+}
+
 .doodle-tools .dashboard .btn[disabled] svg {
   opacity: 0.5;
 }
