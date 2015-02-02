@@ -1,4 +1,6 @@
-# Mobile-Only [Doodle App](http://goo.gl/loJaO5)
+# Doodle [![Build Status](https://travis-ci.org/jzacsh/doodle.svg)](https://travis-ci.org/jzacsh/doodle)
+
+## What: Mobile-Only [Doodle App](http://goo.gl/loJaO5)
 
 This is a simple canvas doodling app I built, [originaly to entertain a
 toddler](http://goo.gl/bPihNp). Like most vacation hacking, this app exploded
