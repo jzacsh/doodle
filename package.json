@@ -19,6 +19,7 @@
     "browserify-shim": "^3.8.2",
     "minimist": "^1.1.0",
     "ncp": "^1.0.1",
+    "uglify-js2": "^2.1.11",
     "underscore": "^1.7.0",
     "watch": "^0.13.0"
   },
@@ -29,26 +30,39 @@
     "tagbug": "TAG_FEEDBACK_URL",
     "tagapp": "TAG_APP_URL",
     "appurl": "goo.gl/loJaO5",
-    "devport": "8000",
-    "onwatch": "echo WATCH RESTARTING && npm run restart"
+    "devport": "8000"
   },
   "scripts": {
-    "browserify": "browserify $npm_package_config_source/doodle_app.js > $npm_package_config_temp/app.js",
-    "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
+    "uglify": "uglifyjs2 --compress --reserve=angular",
+    "browserify": "browserify $npm_package_config_source/doodle_app.js ",
+    "compiledev": "npm run -s browserify > $npm_package_config_temp/app.js",
+    "compile": "npm run -s browserify | npm run -s uglify > $npm_package_config_temp/app.js",
+
     "version": "git show-ref --hash heads/master | tee | cut -c 1-10",
     "bugurl": "echo \"$npm_package_homepage/issues/new?title=wrt+$(npm run -s version)\\&body=to+reproduce\"",
+
     "tagtarget": "echo \"$npm_package_config_temp/index.html\"",
     "tagversion": "sed -i \"s|$npm_package_config_tagver|`npm run -s version`|\" $(npm run -s tagtarget)",
     "tagbugurl": "sed -i \"s|$npm_package_config_tagbug|`npm run -s bugurl`|\" $(npm run -s tagtarget)",
     "tagapp": "sed -i \"s|$npm_package_config_tagapp|$npm_package_config_appurl|\" $(npm run -s tagtarget)",
     "tagbuild": "npm run tagversion && npm run tagbugurl && npm run tagapp",
+
     "test": "echo 'Error: no test specified' >&2 && exit 1",
     "stop": "./bin/killonport $npm_package_config_devport",
     "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
-    "build": "npm run browserify && npm run mvassets && npm run tagbuild",
     "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer $npm_package_config_devport",
-    "restart": "npm run stop && npm run clean && npm run build && npm start",
-    "watch": "./bin/watchforcoding.js \"$npm_package_config_onwatch\" --wait=.25 $PWD/$npm_package_config_source"
+
+    "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
+    "assets": "npm run mvassets && npm run tagbuild",
+    "clear": "npm run stop && npm run clean",
+    "builddev": "npm run compiledev && npm run assets",
+    "build":    "npm run compile    && npm run assets",
+
+    "restartdev": "npm run clear && npm run builddev && npm start",
+    "restart":    "npm run clear && npm run build    && npm start",
+
+    "watchdev": "./bin/watchcode.js \"$(npm run restartdev)\" --wait=.25 $PWD/$npm_package_config_source",
+    "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source"
   },
   "browserify": {
     "transform": [
