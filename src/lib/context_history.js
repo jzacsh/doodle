@@ -1,6 +1,5 @@
 'use strict';
 var underscore = require('underscore');
-var RenderUpdate = require('./render_update');
 var Outliers = require('./outliers');
 
 
