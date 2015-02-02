@@ -5,7 +5,7 @@ var expect = require('expect.js');
 var sinon = require('sinon');
 var _ = require('underscore');
 
-describe.only('RenderUpdate', function() {
+describe('RenderUpdate', function() {
   var ModificationType = ContextModification.ModificationType;
 
   /** @type {!RenderUpdate} */
