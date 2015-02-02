@@ -17,6 +17,7 @@ describe('RenderUpdate', function() {
   beforeEach(function() {
     renderUpdate = new RenderUpdate(TEST_TIMESTAMP);
     expect(renderUpdate.modifications.length).to.be(0);
+    expect(renderUpdate.timeStamp).to.be(TEST_TIMESTAMP);
   });
 
   it('#recordProperty(key, value)', function() {
