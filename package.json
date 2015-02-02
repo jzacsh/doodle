@@ -17,14 +17,17 @@
     "angular": "^1.3.10",
     "browserify": "^8.1.1",
     "browserify-shim": "^3.8.2",
+    "expect.js": "^0.3.1",
     "minimist": "^1.1.0",
+    "mocha": "^2.1.0",
     "ncp": "^1.0.1",
     "uglify-js2": "^2.1.11",
     "underscore": "^1.7.0",
     "watch": "^0.13.0"
   },
   "config": {
-    "temp": "tmp",
+    "tmpsrv": "tmp",
+    "spec": "test",
     "source": "src",
     "tagver": "TAG_VERSION",
     "tagbug": "TAG_FEEDBACK_URL",
@@ -35,34 +38,34 @@
   "scripts": {
     "uglify": "uglifyjs2 --compress --reserve=angular",
     "browserify": "browserify $npm_package_config_source/doodle_app.js ",
-    "compiledev": "npm run -s browserify > $npm_package_config_temp/app.js",
-    "compile": "npm run -s browserify | npm run -s uglify > $npm_package_config_temp/app.js",
+    "compiledev": "npm run -s browserify > $npm_package_config_tmpsrv/app.js",
+    "compile": "npm run -s browserify | npm run -s uglify > $npm_package_config_tmpsrv/app.js",
 
     "version": "git show-ref --hash heads/master | tee | cut -c 1-10",
     "bugurl": "echo \"$npm_package_homepage/issues/new?title=wrt+$(npm run -s version)\\&body=to+reproduce\"",
 
-    "tagtarget": "echo \"$npm_package_config_temp/index.html\"",
+    "tagtarget": "echo \"$npm_package_config_tmpsrv/index.html\"",
     "tagversion": "sed -i \"s|$npm_package_config_tagver|`npm run -s version`|\" $(npm run -s tagtarget)",
     "tagbugurl": "sed -i \"s|$npm_package_config_tagbug|`npm run -s bugurl`|\" $(npm run -s tagtarget)",
     "tagapp": "sed -i \"s|$npm_package_config_tagapp|$npm_package_config_appurl|\" $(npm run -s tagtarget)",
     "tagbuild": "npm run tagversion && npm run tagbugurl && npm run tagapp",
 
-    "test": "echo 'Error: no test specified' >&2 && exit 1",
+    "test": "mocha --recursive $npm_package_config_spec/",
+    "testing": "mocha --recursive --watch $npm_package_config_spec/",
     "stop": "./bin/killonport $npm_package_config_devport",
-    "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
-    "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer $npm_package_config_devport",
-
-    "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
+    "clean": "rm -rf $npm_package_config_tmpsrv/ && mkdir -p $npm_package_config_tmpsrv/",
+    "start": "cd $npm_package_config_tmpsrv && python -m SimpleHTTPServer $npm_package_config_devport",
+    "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_tmpsrv/",
     "assets": "npm run mvassets && npm run tagbuild",
     "clear": "npm run stop && npm run clean",
     "builddev": "npm run compiledev && npm run assets",
-    "build":    "npm run compile    && npm run assets",
+    "build": "npm run compile && npm run assets",
 
     "restartdev": "npm run clear && npm run builddev && npm start",
-    "restart":    "npm run clear && npm run build    && npm start",
+    "restart": "npm run clear && npm run build && npm start",
 
     "watchdev": "./bin/watchcode.js \"$(npm run restartdev)\" --wait=.25 $PWD/$npm_package_config_source",
-    "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source"
+    "watch": "./bin/watchcode.js \"$(npm run restart)\" --wait=.25 $PWD/$npm_package_config_source"
   },
   "browserify": {
     "transform": [
