@@ -70,7 +70,10 @@ cd tmp/
 tar -zcvf "$buildTarBall" ./*
 
 git checkout gh-pages
-git clean -d --force -x  # rm untrackdd files and such
+git ls-files --others -i --exclude-standard | while read file; do
+  rm -v "$file"  # git is so fng complicated stackoverflow.com/a/15931542
+done
+git clean -d --force -x  # rm untracked files and such
 git rm -rf *
 tar -xvf "$buildTarBall"
 rm -v "$buildTarBall"
