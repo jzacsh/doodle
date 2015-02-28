@@ -63,7 +63,9 @@
     "restart":    "npm run clear && npm run build    && npm start",
 
     "watchdev": "./bin/watchcode.js \"$(npm run restartdev)\" --wait=.25 $PWD/$npm_package_config_source",
-    "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source"
+    "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source",
+
+    "deploy": "./bin/deploy.sh"
   },
   "browserify": {
     "transform": [
