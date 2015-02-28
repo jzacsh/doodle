@@ -24,7 +24,7 @@ isRepoDirty() {
 }
 
 # Prints commit message for the gh-pages commit being made, given args:
-# - $1 git version tag 
+# - $1 git version tag
 buildDeployCommitMsg() {
   printf 'automatic github pages deploy, built from tree/%s v.%s' \
       "$popdBranch" \
@@ -48,9 +48,6 @@ getRemoteUrl() {
 
 cd "$repoDir"  # ensure we're at the root of the repo
 
-npm run clean
-npm run build
-
 versionDeploy="$(npm run -s version)"
 if isRepoDirty;then
   if [ "$1" = -p ];then
@@ -62,26 +59,44 @@ if isRepoDirty;then
   fi
 fi
 
-buildTarBall="$(mktemp -t "$(basename "$repoDir")-deploy-v${versionDeploy}.XXXXXXX.tgz")"
+mkTmpTemplate="$(basename "$repoDir")-deploy-v${versionDeploy}"
+
+
+# setup somewhere else, don't want to make a mess of current repo
+tempRepo="$(mktemp -d -t "${mkTmpTemplate}-repo.XXXXXXX")"
+git clone "$repoDir" "$tempRepo"
+cd "$tempRepo"
+git checkout "$popdBranch"
+buildTarBall="$(mktemp -t "${mkTmpTemplate}.XXXXXXX.tgz")"
 # TODO(zacsh) Figure out how to get this from npm directly (in npm run scripts
 # this is $npm_package_config_temp/, but not accessible via `npm config`
 # command...)
+npm install > /dev/null # too noisy
+npm run clean
+npm run build
 cd tmp/
 tar -zcvf "$buildTarBall" ./*
 
 git checkout gh-pages
+
+# clean house
 git ls-files --others -i --exclude-standard | while read file; do
   rm -v "$file"  # git is so fng complicated stackoverflow.com/a/15931542
 done
 git clean -d --force -x  # rm untracked files and such
 git rm -rf *
+
+# unpack assets to top-level dir ./
 tar -xvf "$buildTarBall"
-rm -v "$buildTarBall"
 git add .
 git commit -a -m "$(buildDeployCommitMsg)"
 ghPagesDeployHash="$(git rev-parse HEAD)"
 git push "$pushTarget" gh-pages
 
 git checkout "$popdBranch"
+
+# cleanup after ourselves
+rm -v "$buildTarBall"
+rm -rfv "$tempRepo"
 
 printf '\n\nDeploy pushed: %s/tree/%s\n' "$(getRemoteUrl)" "$ghPagesDeployHash"
