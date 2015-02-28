@@ -35,6 +35,7 @@
   "scripts": {
     "uglify": "uglifyjs2 --compress --reserve=angular",
     "browserify": "browserify $npm_package_config_source/doodle_app.js ",
+    "setupbuild": "mkdir -p $npm_package_config_temp/",
     "compiledev": "npm run -s browserify > $npm_package_config_temp/app.js",
     "compile": "npm run -s browserify | npm run -s uglify > $npm_package_config_temp/app.js",
 
@@ -55,8 +56,8 @@
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
     "assets": "npm run mvassets && npm run tagbuild",
     "clear": "npm run stop && npm run clean",
-    "builddev": "npm run compiledev && npm run assets",
-    "build":    "npm run compile    && npm run assets",
+    "builddev": "npm run setupbuild && npm run compiledev && npm run assets",
+    "build":    "npm run setupbuild && npm run compile    && npm run assets",
 
     "restartdev": "npm run clear && npm run builddev && npm start",
     "restart":    "npm run clear && npm run build    && npm start",
