@@ -13,7 +13,7 @@ set -x
 #
 
 popdBranch="$(git symbolic-ref --short HEAD)"
-repoDir="$(npm root)"
+targetBranch='gh-pages'
 repoDir="${repoDir%/node_modules}"
 pushTarget=origin
 
@@ -23,7 +23,7 @@ isRepoDirty() {
     test -n "$(git status --porcelain 2>&1)"
 }
 
-# Prints commit message for the gh-pages commit being made, given args:
+# Prints commit message for the $targetBranch commit being made, given args:
 # - $1 git version tag
 buildDeployCommitMsg() {
   printf 'automatic github pages deploy, built from tree/%s v.%s' \
@@ -40,6 +40,11 @@ getRemoteUrl() {
     cut -f 2
 }
 
+getCurrentHash() {
+  local hashHead
+  hashHead="$(git show-ref --hash heads/master)"
+  printf '%s' "${hashHead: -10}"
+}
 
 
 #
@@ -60,7 +65,7 @@ if isRepoDirty; then
   fi
 fi
 
-mkTmpTemplate="$(basename "$repoDir")-deploy-v${versionDeploy}"
+mkTmpTemplate="$(basename "$repoDir")-deploy-v$versionDeploy"
 
 
 # setup somewhere else, don't want to make a mess of current repo
@@ -78,7 +83,7 @@ npm run build
 cd tmp/
 tar -zcvf "$buildTarBall" ./*
 
-git checkout gh-pages
+git checkout "$targetBranch"
 
 # clean house
 git ls-files --others -i --exclude-standard | while read file; do
@@ -91,9 +96,14 @@ git clean -d --force -x  # rm untracked files and such
 cd "$tempRepo"
 tar -xvf "$buildTarBall"
 git add .
-git commit -a -m "$(buildDeployCommitMsg)"
-ghPagesDeployHash="$(git rev-parse HEAD)"
-git push "$pushTarget" gh-pages
+isRepoDirty || {
+  printf 'Nothing to deploy: v.%s builds identical assets to %s at %s\n' \
+      "$versionDeploy" "$targetBranch" "$(getCurrentHash)" >&2
+  exit 2
+}
+git commit -a -m "$(buildDeployCommitMsg "$versionDeploy")"
+ghPagesDeployHash="$(getCurrentHash)"
+git push "$pushTarget" "$targetBranch"
 remotePushedTarget="$(getRemoteUrl "$pushTarget")"
 
 git checkout "$popdBranch"
