@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Deploys the current build to github.io pages
+# Deploys the $1 directory output for current build to github.io pages
 
 (( BASH_VERSINFO[0] < 4 )) && exit 99  # panic and tear hair out
 set -e
@@ -17,6 +17,10 @@ targetBranch='gh-pages'
 repoDir="$(npm root)"
 repoDir="${repoDir%/node_modules}"
 pushTarget=origin
+# TODO(zacsh) Figure out how to get this from npm directly (in npm run scripts
+# this is $npm_package_config_temp/, but not accessible via `npm config`
+# command...)
+buildDir="$1"
 
 # returns 1 if there is stuff uncommitted, or untracked in the repo
 isRepoDirty() {
@@ -92,13 +96,10 @@ git clone "$repoDir" "$tempRepo"
 cd "$tempRepo"
 git checkout "$popdBranch"
 buildTarBall="$(mktemp -t "${mkTmpTemplate}.XXXXXXX.tgz")"
-# TODO(zacsh) Figure out how to get this from npm directly (in npm run scripts
-# this is $npm_package_config_temp/, but not accessible via `npm config`
-# command...)
 npm install > /dev/null # too noisy
 npm run clean
 npm run build
-cd tmp/
+cd "$buildDir"
 tar -zcvf "$buildTarBall" ./*
 
 cd "$tempRepo"

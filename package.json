@@ -47,6 +47,7 @@
     "tagbugurl": "sed -i \"s|$npm_package_config_tagbug|`npm run -s bugurl`|\" $(npm run -s tagtarget)",
     "tagapp": "sed -i \"s|$npm_package_config_tagapp|$npm_package_config_appurl|\" $(npm run -s tagtarget)",
     "tagbuild": "npm run tagversion && npm run tagbugurl && npm run tagapp",
+    "appcache": "./bin/build-appcache-manifest.sh doodle-cache  \"$npm_package_config_temp/\"",
 
     "test": "echo 'Error: no test specified' >&2 && exit 1",
     "stop": "./bin/killonport $npm_package_config_devport",
@@ -54,7 +55,7 @@
     "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer $npm_package_config_devport",
 
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
-    "assets": "npm run mvassets && npm run tagbuild",
+    "assets": "npm run mvassets && npm run tagbuild && npm run appcache",
     "clear": "npm run stop && npm run clean",
     "builddev": "npm run setupbuild && npm run compiledev && npm run assets",
     "build":    "npm run setupbuild && npm run compile    && npm run assets",
@@ -65,7 +66,7 @@
     "watchdev": "./bin/watchcode.js \"$(npm run restartdev)\" --wait=.25 $PWD/$npm_package_config_source",
     "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source",
 
-    "deploy": "./bin/deploy.sh"
+    "deploy": "./bin/deploy.sh \"$npm_package_config_temp/\""
   },
   "browserify": {
     "transform": [
