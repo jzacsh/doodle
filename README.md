@@ -1,4 +1,4 @@
-# Mobile-Only [Doodle App](http://goo.gl/loJaO5)
+# Mobile-Only [Doodle App](http://jzacsh.com/doodle)
 
 This is a simple canvas doodling app I built, [originaly to entertain a
 toddler](http://goo.gl/bPihNp). Like most vacation hacking, this app exploded
