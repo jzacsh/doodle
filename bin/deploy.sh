@@ -14,6 +14,7 @@ set -x
 
 popdBranch="$(git symbolic-ref --short HEAD)"
 targetBranch='gh-pages'
+repoDir="$(npm root)"
 repoDir="${repoDir%/node_modules}"
 pushTarget=origin
 
