@@ -11,6 +11,9 @@ set -x
 #
 # basic info and tools...
 #
+colEnd='\033[0m'  # end cap
+colRed='\e[1;31m'
+colGrn='\e[1;32m'
 
 popdBranch="$(git symbolic-ref --short HEAD)"
 targetBranch='gh-pages'
@@ -75,8 +78,8 @@ fi
 # ensure we don't have merge conflicts
 git checkout "$targetBranch"
 git pull origin  "$targetBranch" > /dev/null
-
 remotePushedTarget="$(git config --get "remote.${pushTarget}.url")"
+git checkout "$popdBranch"
 
 mkTmpTemplate="$(basename "$repoDir")-deploy-v$versionDeploy"
 
@@ -115,5 +118,5 @@ rm "$buildTarBall"
 rm -rf "$tempRepo"
 
 cd "$repoDir"
-git checkout "$popdBranch"
-printf '\n\nDeploy pushed: %s/tree/%s\n' "$remotePushedTarget" "$ghPagesDeployHash"
+printf "\n\n${colGrnDeploy} pushed${colEnd}: %s/tree/%s\n" \
+    "$remotePushedTarget" "$ghPagesDeployHash"
