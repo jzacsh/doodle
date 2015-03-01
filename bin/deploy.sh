@@ -36,15 +36,6 @@ buildDeployCommitMsg() {
       "$1"
 }
 
-# Prints the URL `git remote` reports for the origin deployed to
-# $1 remote to scrape
-getRemoteUrl() {
-  git remote --verbose | \
-    grep "${1}.*(push)\$" | \
-    sed -e 's/\s/\t/g' | \
-    cut -f 2
-}
-
 getCurrentHash() {
   local hashHead
   hashHead="$(git show-ref --hash heads/master)"
@@ -85,7 +76,7 @@ fi
 git checkout "$targetBranch"
 git pull origin  "$targetBranch" > /dev/null
 
-remotePushedTarget="$(getRemoteUrl "$pushTarget")"
+remotePushedTarget="$(git config --get "remote.${pushTarget}.url")"
 
 mkTmpTemplate="$(basename "$repoDir")-deploy-v$versionDeploy"
 
