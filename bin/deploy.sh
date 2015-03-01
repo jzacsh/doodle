@@ -50,7 +50,7 @@ getRemoteUrl() {
 cd "$repoDir"  # ensure we're at the root of the repo
 
 versionDeploy="$(npm run -s version)"
-if isRepoDirty;then
+if isRepoDirty; then
   if [ "$1" = -p ];then
     printf 'NOT IMPLEMENTED: -p(rompt) to force deploy\n' >&2
     exit 99
@@ -88,6 +88,7 @@ git clean -d --force -x  # rm untracked files and such
 [ -n "$(git ls-files)" ] && git rm -rf *
 
 # unpack assets to top-level dir ./
+cd "$tempRepo"
 tar -xvf "$buildTarBall"
 git add .
 git commit -a -m "$(buildDeployCommitMsg)"
