@@ -36,7 +36,7 @@ buildDeployCommitMsg() {
 # $1 remote to scrape
 getRemoteUrl() {
   git remote --verbose | \
-    grep "$1*(push)\$" | \
+    grep "${1}.*(push)\$" | \
     sed -e 's/\s/\t/g' | \
     cut -f 2
 }
