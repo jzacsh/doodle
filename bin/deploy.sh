@@ -77,6 +77,10 @@ if isRepoDirty; then
   fi
 fi
 
+# ensure we don't have merge conflicts
+git checkout "$targetBranch"
+git pull origin  "$targetBranch" > /dev/null
+
 remotePushedTarget="$(getRemoteUrl "$pushTarget")"
 
 mkTmpTemplate="$(basename "$repoDir")-deploy-v$versionDeploy"
