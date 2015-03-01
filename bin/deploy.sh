@@ -84,7 +84,7 @@ git ls-files --others -i --exclude-standard | while read file; do
   rm -v "$file"  # git is so fng complicated stackoverflow.com/a/15931542
 done
 git clean -d --force -x  # rm untracked files and such
-git rm -rf *
+git ls-files && git rm -rf *
 
 # unpack assets to top-level dir ./
 tar -xvf "$buildTarBall"
