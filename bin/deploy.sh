@@ -56,7 +56,6 @@ gitRmRepoContents() {
 }
 
 
-
 #
 # actual deploy steps...
 #
@@ -70,7 +69,7 @@ if isRepoDirty; then
     printf 'NOT IMPLEMENTED: -p(rompt) to force deploy\n' >&2
     exit 99
   else
-    printf 'Must fix before deploying: repo is dirty or has untracked files.\n' >&2
+    printf "${colRed}MUST FIX${colEnd} before deploying: repo is dirty or has untracked files.\n" >&2
     exit 1
   fi
 fi
@@ -118,5 +117,5 @@ rm "$buildTarBall"
 rm -rf "$tempRepo"
 
 cd "$repoDir"
-printf "\n\n${colGrnDeploy} pushed${colEnd}: %s/tree/%s\n" \
+printf "\n\n${colGrn}DEPLOY PUSHED${colEnd}: %s/tree/%s\n" \
     "$remotePushedTarget" "$ghPagesDeployHash"
