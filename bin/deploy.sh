@@ -32,9 +32,10 @@ buildDeployCommitMsg() {
 }
 
 # Prints the URL `git remote` reports for the origin deployed to
+# $1 remote to scrape
 getRemoteUrl() {
   git remote --verbose | \
-    grep "$pushTarget*(push)\$" | \
+    grep "$1*(push)\$" | \
     sed -e 's/\s/\t/g' | \
     cut -f 2
 }
@@ -92,11 +93,13 @@ git add .
 git commit -a -m "$(buildDeployCommitMsg)"
 ghPagesDeployHash="$(git rev-parse HEAD)"
 git push "$pushTarget" gh-pages
+remotePushedTarget="$(getRemoteUrl "$pushTarget")"
 
 git checkout "$popdBranch"
 
 # cleanup after ourselves
-rm -v "$buildTarBall"
-rm -rfv "$tempRepo"
+printf 'Cleaning up temp files, suffixed, "%s"-\n' "$mkTmpTemplate"
+rm "$buildTarBall"
+rm -rf "$tempRepo"
 
-printf '\n\nDeploy pushed: %s/tree/%s\n' "$(getRemoteUrl)" "$ghPagesDeployHash"
+printf '\n\nDeploy pushed: %s/tree/%s\n' "$remotePushedTarget" "$ghPagesDeployHash"
