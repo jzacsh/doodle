@@ -117,11 +117,11 @@ git commit -a -m "$(buildDeployCommitMsg "$versionDeploy")" >/dev/null  # too no
 ghPagesDeployHash="$(getCurrentHash)"
 git push "$remotePushedTarget" "$targetBranch"
 
-git checkout "$popdBranch"
-
 # cleanup after ourselves
 printf 'Cleaning up temp files, suffixed, "%s"-\n' "$mkTmpTemplate"
 rm "$buildTarBall"
 rm -rf "$tempRepo"
 
+cd "$repoDir"
+git checkout "$popdBranch"
 printf '\n\nDeploy pushed: %s/tree/%s\n' "$remotePushedTarget" "$ghPagesDeployHash"
