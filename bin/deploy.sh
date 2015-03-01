@@ -66,6 +66,8 @@ if isRepoDirty; then
   fi
 fi
 
+remotePushedTarget="$(getRemoteUrl "$pushTarget")"
+
 mkTmpTemplate="$(basename "$repoDir")-deploy-v$versionDeploy"
 
 
@@ -104,8 +106,7 @@ isRepoDirty || {
 }
 git commit -a -m "$(buildDeployCommitMsg "$versionDeploy")"
 ghPagesDeployHash="$(getCurrentHash)"
-git push "$pushTarget" "$targetBranch"
-remotePushedTarget="$(getRemoteUrl "$pushTarget")"
+git push "$remotePushedTarget" "$targetBranch"
 
 git checkout "$popdBranch"
 
