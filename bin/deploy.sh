@@ -47,6 +47,17 @@ getCurrentHash() {
   printf '%s' "${hashHead: -10}"
 }
 
+gitRmRepoContents() {
+  git ls-files --others -i --exclude-standard | while read file; do
+    rm -v "$file"  # git is so fng complicated stackoverflow.com/a/15931542
+  done
+  git clean -d --force -x  # rm untracked files and such
+  if [ -n "$(git ls-files)" ]; then
+    git rm -rf *
+  fi
+}
+
+
 
 #
 # actual deploy steps...
@@ -86,17 +97,11 @@ npm run build
 cd tmp/
 tar -zcvf "$buildTarBall" ./*
 
-git checkout "$targetBranch"
-
-# clean house
-git ls-files --others -i --exclude-standard | while read file; do
-  rm -v "$file"  # git is so fng complicated stackoverflow.com/a/15931542
-done
-git clean -d --force -x  # rm untracked files and such
-[ -n "$(git ls-files)" ] && git rm -rf *
+cd "$tempRepo"
 
 # unpack assets to top-level dir ./
-cd "$tempRepo"
+git checkout "$targetBranch"
+gitRmRepoContents  # clean house
 tar -xvf "$buildTarBall"
 git add .
 isRepoDirty || {
@@ -104,7 +109,7 @@ isRepoDirty || {
       "$versionDeploy" "$targetBranch" "$(getCurrentHash)" >&2
   exit 2
 }
-git commit -a -m "$(buildDeployCommitMsg "$versionDeploy")"
+git commit -a -m "$(buildDeployCommitMsg "$versionDeploy")" >/dev/null  # too noisy
 ghPagesDeployHash="$(getCurrentHash)"
 git push "$remotePushedTarget" "$targetBranch"
 
