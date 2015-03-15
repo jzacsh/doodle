@@ -51,7 +51,7 @@
 
     "test": "echo 'Error: no test specified' >&2 && exit 1",
     "stop": "./bin/killonport $npm_package_config_devport",
-    "clean": "rm -rf $npm_package_config_temp && mkdir $npm_package_config_temp",
+    "clean": "[ -r $npm_package_config_temp ] && find $npm_package_config_temp/ -mindepth 1 -exec rm -rf {} +;",
     "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer $npm_package_config_devport",
 
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
