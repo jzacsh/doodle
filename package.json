@@ -39,6 +39,7 @@
   "scripts": {
     "uglify": "uglifyjs2 --compress --reserve=angular",
     "browserify": "browserify $npm_package_config_source/doodle_app.js ",
+
     "setupbuild": "mkdir -p $npm_package_config_tmpsrv/",
     "compiledev": "npm run -s browserify > $npm_package_config_tmpsrv/app.js",
     "compile": "npm run -s browserify | npm run -s uglify > $npm_package_config_tmpsrv/app.js",
@@ -64,7 +65,6 @@
     "resetall": "npm run stop && npm run setupbuild && npm run clean",
     "builddev": "npm run resetall && npm run compiledev && npm run assets",
     "build":    "npm run resetall && npm run compile    && npm run assets",
-
     "restartdev": "npm run builddev && npm start",
     "restart":    "npm run build    && npm start",
 
