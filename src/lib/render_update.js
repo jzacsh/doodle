@@ -39,45 +39,6 @@ RenderUpdate.prototype.playBack = function(context) {
 
 
 /**
- * Renders modifications to current context for this history.
- * @param {!CanvasRenderingContext2D} context
- */
-RenderUpdate.prototype.erase = function(context) {
-  var disableEraserCallback = RenderUpdate.
-      buildResetAfterEraserContext_(context);
-  RenderUpdate.setSurfaceContextToEraser_(context);
-  this.playBack.apply(this, context);
-  disableEraserCallback();
-};
-
-
-/**
- * NOTE: COPY PASTED FROM http://stackoverflow.com/a/3334204
- * @param {!CanvasRenderingContext2D} context
- * @private
- */
-RenderUpdate.setSurfaceContextToEraser_ = function(context) {
-  context.globalCompositeOperation = 'destination-out';
-  context.strokeStyle = 'rgba(0,0,0,1)';
-};
-
-
-/**
- * See {@link #setSurfaceContextToEraser_}.
- * @param {!CanvasRenderingContext2D} context
- * @private
- */
-RenderUpdate.buildResetAfterEraserContext_ = function(context) {
-  var originalGlobalCompositeOperation = context.globalCompositeOperation;
-  var originalStrokeStyle = context.strokeStyle;
-  return function(ctx) {
-    ctx.globalCompositeOperation = originalGlobalCompositeOperation;
-    ctx.strokeStyle = originalStrokeStyle;
-  }.bind(null  /*this*/, context);
-};
-
-
-/**
  * Appends a {@link ContextModification.MethodCall} to this history.
  *
  * @param {string} methodName

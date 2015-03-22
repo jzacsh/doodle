@@ -65,8 +65,4 @@ describe('RenderUpdate', function() {
     sinon.assert.calledWith(modA.playBack, mockContext);
     sinon.assert.calledWith(mockContext.arc, 'foo', 'bar', 'baz');
   });
-
-  it('#erase()', function() {
-    throw new Error('implement me');
-  });
 });
