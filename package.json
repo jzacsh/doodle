@@ -30,7 +30,7 @@
     "tagbug": "TAG_FEEDBACK_URL",
     "tagapp": "TAG_APP_URL",
     "appurl": "goo.gl/loJaO5",
-    "devport": "8000"
+    "devport": "2223"
   },
   "scripts": {
     "uglify": "uglifyjs2 --compress --reserve=angular",
@@ -51,17 +51,17 @@
 
     "test": "echo 'Error: no test specified' >&2 && exit 1",
     "stop": "./bin/killonport $npm_package_config_devport",
-    "clean": "[ -r $npm_package_config_temp ] && find $npm_package_config_temp/ -mindepth 1 -exec rm -rf {} +;",
-    "start": "cd $npm_package_config_temp && python -m SimpleHTTPServer $npm_package_config_devport",
+    "clean": "find $npm_package_config_temp/ -mindepth 1 -exec rm -rf {} +;",
+    "start": "./bin/nginx.sh $npm_package_name $npm_package_config_devport $npm_package_config_temp",
 
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_temp/",
     "assets": "npm run mvassets && npm run tagbuild && npm run appcache",
-    "clear": "npm run stop && npm run clean",
-    "builddev": "npm run setupbuild && npm run compiledev && npm run assets",
-    "build":    "npm run setupbuild && npm run compile    && npm run assets",
+    "resetall": "npm run stop && npm run setupbuild && npm run clean",
+    "builddev": "npm run resetall && npm run compiledev && npm run assets",
+    "build":    "npm run resetall && npm run compile    && npm run assets",
 
-    "restartdev": "npm run clear && npm run builddev && npm start",
-    "restart":    "npm run clear && npm run build    && npm start",
+    "restartdev": "npm run builddev && npm start",
+    "restart":    "npm run build    && npm start",
 
     "watchdev": "./bin/watchcode.js \"$(npm run restartdev)\" --wait=.25 $PWD/$npm_package_config_source",
     "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source",
