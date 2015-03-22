@@ -4,9 +4,14 @@
 
 appName="$1"
 appPort="$2"
-staticFiles="$(readlink -f "$3")"
-nginxTmpDir="$(mktemp --directory -t "nginx-local_${appName}.XXXXXXX")"
+staticFiles="$(readlink -f "${3:-$(pwd)}")"
 
+(( $# < 2 )) && {
+  printf 'usage: APP_NAME PORT [STATIC_FILES_DIR] \n' >&2
+  exit 1
+}
+
+nginxTmpDir="$(mktemp --directory -t "nginx-local_${appName}.XXXXXXX")"
 nginxConfig="$nginxTmpDir/conf"
 cat > "$nginxTmpDir/conf" <<END_OF_CUSTOM_NGINX_CONF
 pid $nginxTmpDir/nginx.pid;
@@ -59,21 +64,25 @@ http {
 END_OF_CUSTOM_NGINX_CONF
 
 cleanupTmpServer() {
-  printf 'Caught interrupt for "%s" server on port %s...\n' "$appName" "$appPort" >&2
+  printf '\n\nCaught interrupt for "%s" server on port %s...\n' \
+    "$appName" "$appPort"
 
-  printf '\tKilling nginx server\n' >&2
+  printf '\tKilling nginx server, with EUID=0:\n'
   sudo nginx -c "$nginxConfig" -s stop
 
-  printf '\tDeleting temp configuration in %s\n\n\n' "$nginxTmpDir" >&2
+  printf '\tDeleting temp configuration in %s\n\n\n' "$nginxTmpDir"
   rm -rf "$nginxTmpDir"
+  exit 0
 }
+
+printf '...Starting nginx with EUIDi=0\n'
+if ! sudo nginx -c "$nginxConfig";then
+  printf 'Failed to start nginx\n' >&2
+  exit 4
+fi
+
 trap cleanupTmpServer 3 SIGINT
-
-
-# TODO(zacsh) Figure out how to run nginx as local user (ie: no sudo)
-sudo nginx -c "$nginxConfig" &&
-  printf 'Serving "%s", port :%s,\n\tnginx conf in:\t%s\n\tstatic files from:\t%s\n' \
-    "$appName" "$appPort" "$nginxTmpDir" "$staticFiles"
-
+printf 'Serving "%s", port :%s,\n\tnginx conf in:\t%s\n\tstatic files from:\t%s\n' \
+  "$appName" "$appPort" "$nginxTmpDir" "$staticFiles"
 printf '\tInterrupt, or kill directly:\n\t\tsudo nginx -c "%s" -s stop\n' "$nginxConfig"
 tail -f "$nginxTmpDir"/nginx.*.log
