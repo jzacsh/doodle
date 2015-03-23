@@ -58,7 +58,7 @@
     "testing": "mocha --recursive --watch $npm_package_config_spec/",
     "stop": "./bin/killonport $npm_package_config_devport",
     "clean": "find $npm_package_config_tmpsrv/ -mindepth 1 -exec rm -rf {} +;",
-    "start": "./bin/nginx.sh $npm_package_name $npm_package_config_devport $npm_package_config_tmpsrv",
+    "start": "./bin/httpserver.sh $npm_package_name $npm_package_config_devport $npm_package_config_tmpsrv",
 
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_tmpsrv/",
     "assets": "npm run mvassets && npm run tagbuild && npm run appcache",
@@ -68,8 +68,8 @@
 
     "restartdev": "npm run builddev && npm start",
     "restart":    "npm run build    && npm start",
-    "watchdev": "./bin/watchcode.js \"$(npm run restartdev)\" --wait=.25 $PWD/$npm_package_config_source",
-    "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source",
+    "watchdev": "./bin/watchcode.js 'npm run restartdev' --wait=.25 $PWD/$npm_package_config_source",
+    "watch":    "./bin/watchcode.js 'npm run restart'    --wait=.25 $PWD/$npm_package_config_source",
     "deploy": "./bin/deploy.sh \"$npm_package_config_tmpsrv/\""
   },
   "browserify": {

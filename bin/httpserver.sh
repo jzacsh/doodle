@@ -11,6 +11,11 @@ staticFiles="$(readlink -f "${3:-$(pwd)}")"
   exit 1
 }
 
+if ! type nginx > /dev/null; then
+  python -m SimpleHTTPServer "$appPort"
+  exit "$?"
+fi
+
 nginxTmpDir="$(mktemp --directory -t "nginx-local_${appName}.XXXXXXX")"
 nginxConfig="$nginxTmpDir/conf"
 cat > "$nginxTmpDir/conf" <<END_OF_CUSTOM_NGINX_CONF
