@@ -14,7 +14,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var exec = require('child_process').exec;
 var watch = require('watch');
 
-if(argv._.length === 0) {
+if (argv._.length === 0) {
   console.error('Usage: watch <command> [directory] [--wait=<seconds>]')
   process.exit()
 }
@@ -28,13 +28,13 @@ console.error('> Watching', dir)
 var wait = false
 
 watch.watchTree(dir, doodleOptions, function(f, curr, prev) {
-  if(wait) return
+  if (wait) return
   
   var run = exec(command)
   run.stdout.pipe(process.stdout)
   run.stderr.pipe(process.stderr)
   
-  if(waitTime > 0) {
+  if (waitTime > 0) {
     wait = true
     setTimeout(function () {
       wait = false
