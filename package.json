@@ -33,7 +33,7 @@
     "tagver": "TAG_VERSION",
     "tagbug": "TAG_FEEDBACK_URL",
     "tagapp": "TAG_APP_URL",
-    "appurl": "goo.gl/loJaO5",
+    "appurl": "jzacsh.com/doodle",
     "devport": "2223"
   },
   "scripts": {
@@ -65,12 +65,11 @@
     "resetall": "npm run stop && npm run setupbuild && npm run clean",
     "builddev": "npm run resetall && npm run compiledev && npm run assets",
     "build":    "npm run resetall && npm run compile    && npm run assets",
+
     "restartdev": "npm run builddev && npm start",
     "restart":    "npm run build    && npm start",
-
     "watchdev": "./bin/watchcode.js \"$(npm run restartdev)\" --wait=.25 $PWD/$npm_package_config_source",
     "watch":    "./bin/watchcode.js \"$(npm run restart   )\" --wait=.25 $PWD/$npm_package_config_source",
-
     "deploy": "./bin/deploy.sh \"$npm_package_config_tmpsrv/\""
   },
   "browserify": {
