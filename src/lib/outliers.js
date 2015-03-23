@@ -1,19 +1,21 @@
 'use strict';
 
+var _ = require('underscore');
 
 /**
  * Interquartile Range analyzer intended to find outliers in {@code values}.
  *
  * For more, see: http://en.wikipedia.org/wiki/Quartile#Outliers
  *
- * @param {!Array.<!Outliers.Value>} values
+ * @param {!Array.<!Outliers.Value>|!Array.<number>} values
  * @constructor
  */
 var Outliers = module.exports = function Outliers(values) {
-  /** @private {!Array.<!Outliers.Value>} */
-  this.data_ = values;
+  /** @private {!Array.<!Outliers.Value>|!Array.<number>} */
+  this.data_ = _.isNumber(values[0]) ?
+    values.map(Outliers.Value.fromScalar) : values;
 
-  /** @private {?Outliers.AnalysisCache} */
+  /** @private {?Outliers.Analysis} */
   this.cache_ = null;
 };
 
@@ -31,6 +33,17 @@ Outliers.Value = function(datum, getter) {
   this.datum = datum;
   /** @return {number} */
   this.getValue = getter.bind(null  /*this*/, datum);
+};
+
+
+/**
+ * @param {number} rawScalar
+ * @return {!Outliers.Value}
+ */
+Outliers.Value.fromScalar = function(rawScalar) {
+  return new Outliers.Value(rawScalar, function(rawValue) {
+    return rawValue;
+  });
 };
 
 
@@ -70,9 +83,8 @@ Outliers.Fencing;
  *     minorOutliers: !Array.<!Outliers.Value>,
  *     majorOutliers: !Array.<!Outliers.Value>
  * }}
- * @private
  */
-Outliers.AnalysisCache;
+Outliers.Analysis;
 
 
 /**
@@ -170,15 +182,12 @@ Outliers.prototype.reset = function() {
 
 /** @return {!Array.<!Outliers.Value>} */
 Outliers.prototype.getAnalysisCached_ = function() {
-  return (this.cache_ = this.cache_ || this.buildAnalysisCache_());
+  return (this.cache_ = this.cache_ || this.calculateQuartileRanges());
 };
 
 
-/**
- * @return {!Outliers.AnalysisCache>}
- * @private
- */
-Outliers.prototype.buildAnalysisCache_ = function() {
+/** @return {!Outliers.Analysis} */
+Outliers.prototype.calculateQuartileRanges = function() {
   this.cache_ = {quartiles: {}, dataLength: this.data_.length};
   this.cache_.isDataOddLength = Outliers.
       isOddNumber_(this.cache_.dataLength);
