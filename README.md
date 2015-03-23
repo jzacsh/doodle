@@ -12,12 +12,12 @@ Basically, this is super simple, history-recording canvas JavaScript. The intent
 - **download PNG**s of drawings
 - basic history management: undo/redo
 
-### Known Limitations
+### Known Issues
 I'm making heavy use of Github issues for this repo. The highlights:
-- [issue 4](issue/4): a lot of **unit tests** still unwritten, e2e tests not even thought about
-- [issue 3](issue/3): **branched history** is calculated, but not utilized: UI isn't written yet
-- [issue 6](issue/6): a lot of **mobile only** code, no attempts to make the app useable on desktop
-- [issue 7](issue/7): pollyfills needed for all the **experimental browser features**
+- *issue 4*: a lot of **unit tests** still unwritten, e2e tests not even thought about
+- *issue 3*: **branched history** is calculated, but not utilized: UI isn't written yet
+- *issue 6*: a lot of **mobile only** code, no attempts to make the app useable on desktop
+- *issue 7*: pollyfills needed for all the **experimental browser features**
 
 ## Hacking
 This is basically a tiny angularjs app, but could be built with anything. The real meat of this repo is in the vanilla JavaScript classes prefixed `Doodle...` and similarly vanilla JavaScript in lib/ directory to manage history and `CanvasRenderingContext2D`.
