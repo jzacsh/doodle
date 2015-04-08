@@ -5,6 +5,9 @@ html {
 body {
   margin: 0;
   padding: 0;
+
+  /* applicaiton-specific */
+  touch-action: none;
 }
 
 canvas[doodle-surface] {
@@ -13,8 +16,10 @@ canvas[doodle-surface] {
   display: block;
   outline: 1px solid black;
   clear: both;
-/*background-color: #FFFF98;*/
   background-color: #ffffff;
+
+  /* directive specific */
+  touch-action: none;
 }
 
 .doodle-tools button {
