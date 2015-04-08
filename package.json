@@ -57,12 +57,12 @@
     "test": "mocha --recursive $npm_package_config_spec/",
     "testing": "mocha --recursive --watch $npm_package_config_spec/",
     "stop": "./bin/killonport $npm_package_config_devport",
-    "clean": "find $npm_package_config_tmpsrv/ -mindepth 1 -exec rm -rf {} +;",
+    "clean": "npm run -s setupbuild && find $npm_package_config_tmpsrv/ -mindepth 1 -exec rm -rf {} +;",
     "start": "./bin/httpserver.sh $npm_package_name $npm_package_config_devport $npm_package_config_tmpsrv",
 
     "mvassets": "cp -rf $npm_package_config_source/assets/* $npm_package_config_tmpsrv/",
     "assets": "npm run mvassets && npm run tagbuild && npm run appcache",
-    "resetall": "npm run stop && npm run setupbuild && npm run clean",
+    "resetall": "npm run stop && npm run clean",
     "builddev": "npm run resetall && npm run compiledev && npm run assets",
     "build":    "npm run resetall && npm run compile    && npm run assets",
 
