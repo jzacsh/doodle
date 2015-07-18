@@ -18,6 +18,7 @@
     "browserify": "^8.1.1",
     "browserify-shim": "^3.8.2",
     "expect.js": "^0.3.1",
+    "hammer-touchemulator": "0.0.2",
     "minimist": "^1.1.0",
     "mocha": "^2.1.0",
     "ncp": "^1.0.1",
