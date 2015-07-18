@@ -42,7 +42,7 @@ buildDeployCommitMsg() {
 getCurrentHash() {
   local hashHead
   hashHead="$(git show-ref --hash heads/master)"
-  printf '%s' "${hashHead: -10}"
+  printf '%s' "${hashHead:0:10}"
 }
 
 gitRmRepoContents() {
