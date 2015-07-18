@@ -20,6 +20,13 @@ I'm making heavy use of Github issues for this repo. The highlights:
 - *issue 7*: pollyfills needed for all the **experimental browser features**
 
 ## Hacking
+On first clone, quick `npm install`:
+```bash
+  git clone git@github.com:jzacsh/doodle.git &&
+    cd doodle &&
+    npm install
+```
+
 This is basically a tiny angularjs app, but could be built with anything. The real meat of this repo is in the vanilla JavaScript classes prefixed `Doodle...` and similarly vanilla JavaScript in lib/ directory to manage history and `CanvasRenderingContext2D`.
 
 ### Testing
