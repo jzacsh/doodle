@@ -56,7 +56,7 @@
 
     "test": "mocha --recursive $npm_package_config_spec/",
     "testing": "mocha --recursive --watch $npm_package_config_spec/",
-    "stop": "./bin/killonport $npm_package_config_devport",
+    "stop": "sudo ./bin/killonport $npm_package_config_devport",
     "clean": "npm run -s setupbuild && find $npm_package_config_tmpsrv/ -mindepth 1 -exec rm -rf {} +;",
     "start": "./bin/httpserver.sh $npm_package_name $npm_package_config_devport $npm_package_config_tmpsrv",
 
