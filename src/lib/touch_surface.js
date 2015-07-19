@@ -56,7 +56,7 @@ var TouchSurface = module.exports = function TouchSurface(
 
   /** @private {?CanvasRenderingContext2D} */
   this.context_ = null;
-  
+
   /** @type {?ContextTouch} */
   this.contextTouch = null;
 
@@ -82,17 +82,27 @@ var TouchSurface = module.exports = function TouchSurface(
  * - animationFrame: the {@link Window.requestAnimationFrame}'s timestamp during
  *   which this handler is being executed.
  * - timeStamp: {@link TouchEvent#timeStamp} of the event that triggered this
- *   handler. 
+ *   handler.
  * - changedTouch: One of {@link TouchEvent#changedTouches}
  *
- * @typdef {function(DOMHighResTimeStamp, number, !Touch)}
+ * @typedef {function(DOMHighResTimeStamp, number, !Touch)}
  */
 TouchSurface.TouchChangedHandler;
 
 
+/**
+ * @typedef {{
+ *     hex: {r: string, g: string, b: string},
+ *     dec: {r: number, g: number, b: number}
+ * }}
+ * @private
+ */
+TouchSurface.RgbMap_;
+
+
 /** @enum {string} */
 TouchSurface.Options = {
-  MAXIMIZED: 'touchSurfaceMaximized',
+  MAXIMIZED: 'touchSurfaceMaximized'
 };
 
 
@@ -117,10 +127,7 @@ TouchSurface.DefaultSettings = {
 };
 
 
-/**
- * @param {string} touchEventId
- * @return {string} RGB hex value
- */
+/** @return {string} RGB hex value */
 TouchSurface.buildRandomRgbStyle = function() {
   return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
 };
@@ -131,7 +138,7 @@ TouchSurface.prototype.bindToCanvas = function(canvasEl) {
   if (!canvasEl.nodeName ||
       !canvasEl.nodeName.toLowerCase ||
       canvasEl.nodeName.toLowerCase() != 'canvas') {
-    throw new Error('`el` of `bindToCanvas(el)` MUST be a <canvas> Element');  
+    throw new Error('`el` of `bindToCanvas(el)` MUST be a <canvas> Element');
   }
 
   if (this.context_) {
@@ -152,7 +159,7 @@ TouchSurface.prototype.bindToCanvas = function(canvasEl) {
         this.window_,
         'resize',
         this.resizeSurfaceToTarget_.bind(this, this.context_));
-  }  
+  }
 
   // Listen to interactions
   var renderSurfaceOn = this.queueRefreshTask_.bind(this, canvasEl);
@@ -189,9 +196,11 @@ TouchSurface.prototype.getLineColorSetting = function() {
 };
 
 
-/** @param {string=} opt_backgroundColor to otionally override default value */
-TouchSurface.prototype.setBackgroundColorSetting = function(opt_backgroundColor) {
-  this.updateSettings_(TouchSurface.Setting.BACKGROUND_COLOR, opt_backgroundColor);
+/** @param {string=} opt_backgroundColor to optionally override default */
+TouchSurface.prototype.setBackgroundColorSetting = function(
+    opt_backgroundColor) {
+  this.updateSettings_(
+      TouchSurface.Setting.BACKGROUND_COLOR, opt_backgroundColor);
 };
 
 
@@ -240,9 +249,10 @@ TouchSurface.prototype.attemptPreventDefault_ = function(event) {
  * @param {string} hexColorStyle
  *     CSS style hex value starting with hash symbol, followed by 3 pairs of
  *     alpha-numeric characters in hex range. eg: <code>'#ff12e3'</code>
- * @param {{r: number, g: number, b: number}}
+ * @return {TouchSurface.RgbMap_}
  *     Decimal values for "red", "green", "blue" as scraped
  *     from {@code hexColorStyle}. eg: <code>{r: 'ff', g: '12', b: 'e3'}</code>
+ * @private
  */
 TouchSurface.buildHexMapFromRgbStyle_ = function(hexColorStyle) {
   var hashRgb = hexColorStyle.
@@ -259,7 +269,7 @@ TouchSurface.buildHexMapFromRgbStyle_ = function(hexColorStyle) {
 
 /**
  * Plays back all rendered history, whether its been erased or not.
- * 
+ *
  * @param {number=} opt_endIndex
  */
 TouchSurface.prototype.playBack = function(opt_endIndex) {
@@ -352,7 +362,8 @@ TouchSurface.prototype.contextmenuEventHandler_ = function(event) {
  * @param {function} handler
  * @private
  */
-TouchSurface.prototype.queueRefreshTask_ = function(target, eventName, handler) {
+TouchSurface.prototype.queueRefreshTask_ = function(
+    target, eventName, handler) {
   target.addEventListener(eventName, function(event) {
     var rafIdIdx = Object.keys(this.rafCancelIds_).length;
     var eventArgs = arguments;
@@ -366,7 +377,7 @@ TouchSurface.prototype.queueRefreshTask_ = function(target, eventName, handler) 
           return taskReturn;
         }.bind(this));
     return true;  // cancel
-  }.bind(this),  false  /*useCapture*/);
+  }.bind(this), false  /*useCapture*/);
 };
 
 
@@ -403,7 +414,8 @@ TouchSurface.prototype.resizeSurfaceToTarget_ = function(surface, event) {
  * @param {!Window} container
  * @private
  */
-TouchSurface.prototype.resizeSurfaceToContainer_ = function(surface, container) {
+TouchSurface.prototype.resizeSurfaceToContainer_ = function(
+    surface, container) {
   surface.canvas.width = container.innerWidth;
   surface.canvas.height = container.innerHeight;
   this.rootScope_.$broadcast(TouchSurface.Events.RESIZE);
@@ -416,7 +428,8 @@ TouchSurface.prototype.resizeSurfaceToContainer_ = function(surface, container) 
  * @return {boolean} cancelable
  * @private
  */
-TouchSurface.prototype.handleTouchStart_ = function(touchEvent, animationFrame) {
+TouchSurface.prototype.handleTouchStart_ = function(
+    touchEvent, animationFrame) {
   this.attemptPreventDefault_(touchEvent);
 
   Array.prototype.forEach.call(touchEvent.changedTouches, function() {

@@ -25,7 +25,8 @@ var Outliers = module.exports = function Outliers(values) {
  * @param {*} datum
  *     Anything from which {@code getter} will be able to fetch a numeric value.
  * @param {function(*) : number} getter
- *     Callback, given {@code datum}, will return its value for outlier analysis.
+ *     Callback which, given {@code datum}, should return its value for outlier
+ *     analysis.
  * @constructor
  */
 Outliers.Value = function(datum, getter) {
@@ -74,7 +75,7 @@ Outliers.Fencing;
 
 
 /**
- * @typdef {{
+ * @typedef {{
  *     isDataOddLength: boolean,
  *     dataLength: number,
  *     quartiles: ?Outliers.Quartiles,
@@ -180,7 +181,10 @@ Outliers.prototype.reset = function() {
 };
 
 
-/** @return {!Array.<!Outliers.Value>} */
+/**
+ * @return {!Array.<!Outliers.Value>}
+ * @private
+ */
 Outliers.prototype.getAnalysisCached_ = function() {
   return (this.cache_ = this.cache_ || this.calculateQuartileRanges());
 };
@@ -208,7 +212,7 @@ Outliers.prototype.calculateQuartileRanges = function() {
 
 
 /**
- * @param {!Outlier.Fencing} fencing
+ * @param {!Outlier.Fencing} fence
  * @return {!Array.<!Outliers.Value>}
  * @private
  */

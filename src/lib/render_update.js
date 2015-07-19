@@ -42,14 +42,15 @@ RenderUpdate.prototype.playBack = function(context) {
  * Appends a {@link ContextModification.MethodCall} to this history.
  *
  * @param {string} methodName
- * @param {*...} var_args
+ * @param {string|number} value
  * @return {!Ctrl.RenderUpdate}
  */
-RenderUpdate.prototype.recordProperty = function(key, value) {
+// TODO(zacsh) determine if this is supposed to be var number of `value`s
+RenderUpdate.prototype.recordProperty = function(methodName, value) {
   this.modifications.push(
       new ContextModification(
           ContextModification.ModificationType.PROPERTY,
-          {key: key, value: value},
+          {key: methodName, value: value},
           undefined  /*opt_methodCall*/));
   return this;
 };

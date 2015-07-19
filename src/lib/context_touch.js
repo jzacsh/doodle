@@ -49,7 +49,7 @@ ContextTouch.ChangedTouchKey;
  // TODO load a module that provides this and delete it from here
 ContextTouch.arrayEach_ = function(a, callback, from, to, opt_this) {
   var length = a.length;
-  
+
   var runCallback = function() {
     callback.call(
         opt_this || null,  // this
@@ -61,7 +61,7 @@ ContextTouch.arrayEach_ = function(a, callback, from, to, opt_this) {
   if (from > to) {
     do { runCallback(); } while (from-- !== to);
   } else if (from < to) {
-    do { runCallback(); } while (from++ !== to); 
+    do { runCallback(); } while (from++ !== to);
   } else {
     runCallback();
   }
@@ -84,6 +84,7 @@ ContextTouch.keyToId_ = function(changedTouchKey) {
 /**
  * @param {!ContextTouch.ChangedTouchKey} changedTouchKey
  * @param {function(!TouchRendition, number, ongoingTouches)} handler
+ * @private
  */
 ContextTouch.prototype.forEachOngoing_ = function(changedTouchKey, handler) {
   this.getOngoingRenditions(changedTouchKey).forEach(handler);
@@ -225,8 +226,9 @@ ContextTouch.prototype.findFirstMatchingContext = function(touch, matcher) {
  * @param {function(!ContextTouch.ContextModification) : boolean} matcher
  * @param {boolean} filterChronologically
  * @return {!ContextTouch.ContextModification}
- *     First - or last if {@code filterChronologically} - chronological
- *     occurance of a Modification to {@code rendition}, passing {@code matcher}.
+ *     First - or last, if {@code filterChronologically} - chronological
+ *     occurance of a Modification to {@code rendition}, passing
+ *     {@code matcher}.
  * @private
  */
 // TODO Profile performance here, consider caching these lookups

@@ -4,7 +4,7 @@
 
 /**
  * Singular visual change to CanvasRenderingContext2D.
- * 
+ *
  * NOTE: Only a single optional property can be passed, according to its
  * respective {@link ContextModification.ModificationType}.
  *
@@ -55,6 +55,7 @@ ContextModification.ModificationType = {
  * @param {ContextModification.ModificationType} type
  * @param {string=} opt_property
  * @param {!ContextModification.MethodCall=} opt_methodCall
+ * @private
  */
 ContextModification.assertDescriptorsMatchType_ = function(
     type, opt_property, opt_methodCall) {

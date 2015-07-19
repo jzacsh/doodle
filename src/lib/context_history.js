@@ -43,20 +43,22 @@ var ContextHistory = module.exports = function ContextHistory() {
     *
     * @see {@link Outliers} for more
     *
-    * @private {!Object.<number, !Object.<number, !ContextHistory.TimstampDiff>>}
+    * @private {!Object.<
+    *     number,
+    *     !Object.<number, !ContextHistory.TimstampDiff>>}
     */
    this.cachedPrePauses_ = {};
 };
 
 
-/** @typdef {Array.<!ContextHistory.Update>} */
+/** @typedef {Array.<!ContextHistory.Update>} */
 ContextHistory.Timeline;
 
 
 /**
  * - history: the branched version of history
  * - branchedAt: timeStamp when the branch occurred.
- * 
+ *
  * @typedef {{branchedAt: number, history: !ContextHistory.Timeline}}
  */
 ContextHistory.Branch;
@@ -123,7 +125,7 @@ ContextHistory.getSingleRender_ = function(update) {
 ContextHistory.compareRenderUpdates_ = function(updateA, updateB) {
   var timeStampA = ContextHistory.getSingleRender_(updateA).timeStamp;
   var timeStampB = ContextHistory.getSingleRender_(updateB).timeStamp;
-  
+
 
   if (timeStampA === timeStampB) {
     return 0;
@@ -143,7 +145,10 @@ ContextHistory.getDeltaFromDiff_ = function(diff) {
 };
 
 
-/** @return {!Object.<number, !ContextHistory.TimstampDiff>} stored results */
+/**
+ * @return {!Object.<number, !ContextHistory.TimstampDiff>} stored results
+ * @private
+ */
 ContextHistory.prototype.getCachedPrePauses_ = function() {
   if (this.history_.length < 10) {
     return {};  // skip processing without some real data
@@ -215,7 +220,7 @@ ContextHistory.prototype.buildTimestampOutlierDeltas_ = function() {
         if (diffA.getValue() === diffB.getValue()) {
           return 0;
         }
-      
+
         return diffA.getValue() < diffB.getValue() ? -1 : 1;
       });
 };
@@ -405,7 +410,7 @@ ContextHistory.prototype.assertValidHistoryIndex_ = function(index) {
   }
 
   throw new Error(
-      'Invalid history(length: ' +  this.history_.length + ') index, ' +
+      'Invalid history(length: ' + this.history_.length + ') index, ' +
       '"' + index + '"; expected value ' +
       '[0-' + this.getEndingIndex_() + ']');
 };
@@ -427,7 +432,7 @@ ContextHistory.prototype.undoAll = function(context) {
  * @private
  */
 ContextHistory.prototype.setRedoBranch_ = function(historyIndex) {
-  if (historyIndex !== -1 ) {
+  if (historyIndex !== -1) {
     this.assertValidHistoryIndex_(historyIndex);
   }
 

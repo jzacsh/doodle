@@ -37,7 +37,7 @@ TouchRendition.SIGNIFICANT_MOVE_DELTA_MS = 900;
 
 /**
  * {@link Touch} API's properties.
- * @const {!Array.<string>} 
+ * @const {!Array.<string>}
  */
 TouchRendition.TOUCH_INTERFACE_PROPERTIES = [
   'identifier',
@@ -78,6 +78,7 @@ TouchRendition.prototype.getMozillaExampleColorForTouchId_ = function() {
 /**
  * @param {!Touch} touch
  * @return {!Touch} pseudo Touch object.
+ * @private
  */
 TouchRendition.copyTouch_ = function(touch) {
   var copy = {};
