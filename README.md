@@ -47,8 +47,10 @@ Compile & serve locally, via [npm `watch`](https://www.npmjs.com/package/watch) 
 npm run watch # or `npm run watchdev` for uncompiled
 ```
 
-### Deploy to Your Github Pages
-Deploy to your remote fork, eg: if that's `yourname/doodle`, this will deploy to `yourname.github.io/doodle`
+### Deploy to Your CDN
+This is a static web app, meaning its plain text files that only a browser
+interprets. Just serve them from anywhere. The target files are produced in
+`./tmp/` by executing:
 ```bash
-npm run deploy # haven't actually tested with someone elses repo
+npm run build
 ```
