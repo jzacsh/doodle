@@ -1,4 +1,4 @@
-# [Doodle App](http://jzacsh.com/doodle) [![Build Status](https://travis-ci.org/jzacsh/doodle.svg)](https://travis-ci.org/jzacsh/doodle)
+# [Doodle App](https://study.j.zac.sh/doodle) [![Build Status](https://travis-ci.org/jzacsh/doodle.svg)](https://travis-ci.org/jzacsh/doodle)
 This is a simple canvas doodling app I built, [originaly to entertain a
 toddler](http://goo.gl/bPihNp). Like most vacation hacking, this app exploded
 over my two week break into a full fledged app with undo/redo, history-jumping,
